@@ -25,13 +25,19 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   // The street block.
   $format['street_block'] = array(
     '#type' => 'addressfield_container',
-    '#attributes' => array('class' => array('street-block')),
+    '#attributes' => array(
+      'class' => array('street-block'),
+    ),
     '#weight' => 0,
   );
   $format['street_block']['thoroughfare'] = array(
     '#title' => t('Address 1'),
     '#tag' => 'div',
-    '#attributes' => array('class' => array('thoroughfare')),
+    '#attributes' => array(
+      'class' => array('thoroughfare'),
+      'x-autocompletetype' => 'address-line1',
+      'autocomplete' => 'address-line1',
+    ),
     '#size' => 30,
     // The #required will be automatically set to FALSE when processing.
     '#required' => TRUE,
@@ -39,12 +45,18 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   $format['street_block']['premise'] = array(
     '#title' => t('Address 2'),
     '#tag' => 'div',
-    '#attributes' => array('class' => array('premise')),
+    '#attributes' => array(
+      'class' => array('premise'),
+      'x-autocompletetype' => 'address-line2',
+      'autocomplete' => 'address-line2',
+    ),
     '#size' => 30,
   );
   $format['locality_block'] = array(
     '#type' => 'addressfield_container',
-    '#attributes' => array('class' => array('addressfield-container-inline', 'locality-block', 'country-' . $address['country'])),
+    '#attributes' => array(
+      'class' => array('addressfield-container-inline', 'locality-block', 'country-' . $address['country']),
+    ),
     '#weight' => 50,
   );
   $format['locality_block']['#attached']['css'][] = drupal_get_path('module', 'addressfield') . '/addressfield.css';
@@ -52,21 +64,33 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#title' => t('Postal code'),
     '#size' => 10,
     '#required' => TRUE,
-    '#attributes' => array('class' => array('postal-code')),
+    '#attributes' => array(
+      'class' => array('postal-code'),
+      'x-autocompletetype' => 'postal-code',
+      'autocomplete' => 'postal-code',
+    ),
   );
   $format['locality_block']['locality'] = array(
     '#title' => t('City'),
     '#size' => 30,
     '#required' => TRUE,
     '#prefix' => ' ',
-    '#attributes' => array('class' => array('locality')),
+    '#attributes' => array(
+      'class' => array('locality'),
+      'x-autocompletetype' => 'locality',
+      'autocomplete' => 'locality',
+    ),
   );
   $format['country'] = array(
     '#title' => t('Country'),
     '#options' => _addressfield_country_options_list(),
     '#render_option_value' => TRUE,
     '#required' => TRUE,
-    '#attributes' => array('class' => array('country')),
+    '#attributes' => array(
+      'class' => array('country'),
+      'x-autocompletetype' => 'country',
+      'autocomplete' => 'country',
+    ),
     '#weight' => 100,
   );
 
@@ -89,7 +113,11 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       '#size' => 10,
       '#required' => TRUE,
       '#prefix' => ' ',
-      '#attributes' => array('class' => array('state')),
+      '#attributes' => array(
+        'class' => array('state'),
+        'x-autocompletetype' => 'region',
+        'autocomplete' => 'region',
+      ),
     );
   }
 
