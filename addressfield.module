@@ -397,6 +397,27 @@ function addressfield_field_is_empty($item, $field) {
 }
 
 /**
+ * Implements hook_field_presave().
+ */
+function addressfield_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  foreach ($items as $delta => &$item) {
+    // If the first name and last name are set but the name line isn't...
+    if (isset($item['first_name']) && isset($item['last_name']) && !isset($item['name_line'])) {
+      // Combine the first and last name to be the name line.
+      $items[$delta]['name_line'] = $items[$delta]['first_name'] . ' ' . $items[$delta]['last_name'];
+    }
+    elseif (isset($item['name_line'])) {
+      // Otherwise if the name line is set, separate it out into a best guess at
+      // the first and last name.
+      $names = explode(' ', $item['name_line']);
+
+      $item['first_name'] = trim(array_shift($names));
+      $item['last_name'] = trim(implode(' ', $names));
+    }
+  }
+}
+
+/**
  * Implements hook_field_widget_info()
  */
 function addressfield_field_widget_info() {
