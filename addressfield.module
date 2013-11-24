@@ -411,8 +411,16 @@ function addressfield_field_presave($entity_type, $entity, $field, $instance, $l
       // the first and last name.
       $names = explode(' ', $item['name_line']);
 
-      $item['first_name'] = trim(array_shift($names));
-      $item['last_name'] = trim(implode(' ', $names));
+      $item['first_name'] = array_shift($names);
+      $item['last_name'] = implode(' ', $names);
+    }
+
+    // Trim whitespace from all of the address components and convert any double
+    // spaces to single spaces.
+    foreach ($item as $key => &$value) {
+      if (!in_array($key, array('element_key', 'data')) && is_string($value)) {
+        $value = trim(str_replace('  ', ' ', $value));
+      }
     }
   }
 }
