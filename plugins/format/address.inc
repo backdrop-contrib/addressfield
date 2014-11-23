@@ -458,6 +458,47 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       'CIT' => t('Chatham Islands Territory'),
     );
   }
+  elseif ($address['country'] == 'IN') {
+    $format['locality_block']['administrative_area']['#options'] = array(
+      ''   => t('--'),
+      'AN' => t('Andaman & Nicobar'),
+      'AP' => t('Andhra Pradesh'),
+      'AR' => t('Arunachal Pradesh'),
+      'AS' => t('Assam'),
+      'BR' => t('Bihar'),
+      'CH' => t('Chandigarh'),
+      'CT' => t('Chhattisgarh'),
+      'DD' => t('Daman & Diu'),
+      'DL' => t('Delhi'),
+      'DN' => t('Dadra & Nagar Haveli'),
+      'GA' => t('Goa'),
+      'GJ' => t('Gujarat'),
+      'HP' => t('Himachal Pradesh'),
+      'HR' => t('Haryana'),
+      'JH' => t('Jharkhand'),
+      'JK' => t('Jammu & Kashmir'),
+      'KA' => t('Karnataka'),
+      'KL' => t('Kerala'),
+      'LD' => t('Lakshadweep'),
+      'MH' => t('Maharashtra'),
+      'MN' => t('Manipur'),
+      'ML' => t('Meghalaya'),
+      'MP' => t('Madhya Pradesh'),
+      'MZ' => t('Mizoram'),
+      'NL' => t('Nagaland'),
+      'OR' => t('Odisha'),
+      'PB' => t('Punjab'),
+      'PY' => t('Puducherry'),
+      'RJ' => t('Rajasthan'),
+      'SK' => t('Sikkim'),
+      'TN' => t('Tamil Nadu'),
+      'TR' => t('Tripura'),
+      'UP' => t('Uttar Pradesh'),
+      'UT' => t('Uttarakhand'),
+      'WB' => t('West Bengal'),
+    );
+    $format['locality_block']['administrative_area']['#title'] = t('State');
+  }
 
   // Those countries tend to put the postal code after the locality.
   static $countries_postal_code_after_locality = array('AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BT', 'CA', 'FM', 'GB', 'ID', 'IN', 'JM', 'JO', 'KH', 'LB', 'LS', 'LV', 'MM', 'MN', 'MV', 'NG', 'NP', 'NZ', 'PE', 'PK', 'PR', 'PW', 'SA', 'SG', 'SO', 'TH', 'US', 'VI', 'VG', 'VN');
