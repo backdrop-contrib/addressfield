@@ -247,13 +247,14 @@ function _addressfield_render_address(&$format, $address) {
       // If the element instructs us to render the option value instead of the
       // raw address element value and its #options array has a matching key,
       // swap it out for the option value now.
-      $child['#children'] = '';
-
-      if (!empty($child['#render_option_value']) && isset($child['#options'][$address[$key]])) {
+      if (!empty($child['#render_option_value']) && isset($address[$key]) && isset($child['#options'][$address[$key]])) {
         $child['#children'] = check_plain($child['#options'][$address[$key]]);
       }
       elseif (isset($address[$key])) {
         $child['#children'] = check_plain($address[$key]);
+      }
+      else {
+        $child['#children'] = '';
       }
 
       // Skip empty elements.
