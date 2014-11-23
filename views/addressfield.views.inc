@@ -35,6 +35,7 @@ function addressfield_field_views_data($field) {
     'name_line' => 'views_handler_field',
     'first_name' => 'views_handler_field',
     'last_name' => 'views_handler_field',
+    'data' => 'views_handler_field_serialized',
   );
 
   // Get the translated field information.
