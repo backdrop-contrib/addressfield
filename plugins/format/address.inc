@@ -105,6 +105,12 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     unset($format['locality_block'][$first_child]['#prefix']);
   }
 
+  // These countries have optional postal codes.
+  static $countries_optional_postal_code = array('LB');
+  if (in_array($address['country'], $countries_optional_postal_code)) {
+    $format['locality_block']['postal_code']['#required'] = FALSE;
+  }
+
   // Those countries generally use the administrative area in postal addresses.
   static $countries_administrative_area = array('AR', 'AU', 'BR', 'BS', 'BY', 'BZ', 'CA', 'CN', 'DO', 'EG', 'ES', 'FJ', 'FM', 'GB', 'HN', 'ID', 'IE', 'IN', 'IT', 'JO', 'JP', 'KI', 'KN', 'KR', 'KW', 'KY', 'KZ', 'MX', 'MY', 'MZ', 'NG', 'NI', 'NR', 'NZ', 'OM', 'PA', 'PF', 'PG', 'PH', 'PR', 'PW', 'RU', 'SM', 'SO', 'SR', 'SV', 'TH', 'TW', 'UA', 'US', 'UY', 'VE', 'VI', 'VN', 'YU', 'ZA');
   if (in_array($address['country'], $countries_administrative_area)) {
