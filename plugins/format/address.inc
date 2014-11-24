@@ -614,6 +614,72 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     );
   }
 
+  // JP-specific tweaks
+  if ($address['country'] == 'JP') {
+    // Change the order.
+    $format['locality_block']['#weight'] = 10;
+    $format['locality_block']['#attributes']['class'][0] = 'addressfield-container';
+    $format['locality_block']['postal_code']['#weight'] = 10;
+    $format['locality_block']['postal_code']['#tag'] = 'div';
+    $format['locality_block']['postal_code']['#size'] = 30;
+    $format['locality_block']['administrative_area']['#title'] = t('Prefecture');
+    $format['locality_block']['administrative_area']['#weight'] = 20;
+    $format['locality_block']['administrative_area']['#size'] = 30;
+    $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
+    $format['locality_block']['administrative_area']['#options'] = array(
+      ''   => t('--'),
+      '01' => t('Hokkaido'),
+      '02' => t('Aomori'),
+      '03' => t('Iwate'),
+      '04' => t('Miyagi'),
+      '05' => t('Akita'),
+      '06' => t('Yamagata'),
+      '07' => t('Fukushima'),
+      '08' => t('Ibaraki'),
+      '09' => t('Tochigi'),
+      '10' => t('Gunma'),
+      '11' => t('Saitama'),
+      '12' => t('Chiba'),
+      '13' => t('Tokyo'),
+      '14' => t('Kanagawa'),
+      '15' => t('Niigata'),
+      '16' => t('Toyama'),
+      '17' => t('Ishikawa'),
+      '18' => t('Fukui'),
+      '19' => t('Yamanashi'),
+      '20' => t('Nagano'),
+      '21' => t('Gifu'),
+      '22' => t('Shizuoka'),
+      '23' => t('Aichi'),
+      '24' => t('Mie'),
+      '25' => t('Shiga'),
+      '26' => t('Kyoto'),
+      '27' => t('Osaka'),
+      '28' => t('Hyogo'),
+      '29' => t('Nara'),
+      '30' => t('Wakayama'),
+      '31' => t('Tottori'),
+      '32' => t('Shimane'),
+      '33' => t('Okayama'),
+      '34' => t('Hiroshima'),
+      '35' => t('Yamaguchi'),
+      '36' => t('Tokushima'),
+      '37' => t('Kagawa'),
+      '38' => t('Ehime'),
+      '39' => t('Kochi'),
+      '40' => t('Fukuoka'),
+      '41' => t('Saga'),
+      '42' => t('Nagasaki'),
+      '43' => t('Kumamoto'),
+      '44' => t('Oita'),
+      '45' => t('Miyazaki'),
+      '46' => t('Kagoshima'),
+      '47' => t('Okinawa'),
+    );
+    $format['locality_block']['locality']['#weight'] = 30;
+    $format['street_block']['#weight'] = 20;
+  }
+
   if ($context['mode'] == 'form') {
     // Provide a wrapper ID for AJAX replacement based on country selection.
     if (!isset($format['#wrapper_id'])) {
