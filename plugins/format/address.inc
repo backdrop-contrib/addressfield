@@ -346,7 +346,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       'H' => t('Huelva'),
       'HU' => t('Huesca'),
       'J' => t("Jaén"),
-      'PM' => t("Islas Baleares"),
       'LO' => t('La Rioja'),
       'GC' => t('Las Palmas'),
       'LE' => t("León"),
