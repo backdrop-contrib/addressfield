@@ -649,6 +649,22 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['administrative_area']['#weight'] = 1;
     $format['locality_block']['locality']['#weight'] = 2;
   }
+  elseif ($address['country'] == 'ZA') {
+    $format['locality_block']['administrative_area']['#options'] = array(
+      ''   => t('--'),
+      'EC' => t('Eastern Cape'),
+      'FS' => t('Free State'),
+      'GT' => t('Gauteng'),
+      'NL' => t('KwaZulu-Natal'),
+      'LP' => t('Limpopo'),
+      'MP' => t('Mpumalanga'),
+      'NC' => t('Northern Cape'),
+      'NW' => t('North West'),
+      'WC' => t('Western Cape'),
+    );
+    $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
+    $format['locality_block']['administrative_area']['#title'] = t('Province');
+  }
 
   // Those countries tend to put the postal code after the locality.
   static $countries_postal_code_after_locality = array('AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BT', 'CA', 'FM', 'GB', 'ID', 'IN', 'JM', 'JO', 'KH', 'LB', 'LS', 'LV', 'MM', 'MN', 'MV', 'NG', 'NP', 'NZ', 'PK', 'PR', 'PW', 'SA', 'SG', 'SO', 'TH', 'US', 'VI', 'VG', 'VN');
@@ -699,6 +715,40 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       array(
         '#title' => t('Postcode'),
         '#weight' => 60,
+        '#prefix' => '',
+        '#tag' => 'div',
+      )
+    );
+  }
+
+  // ZA-specific tweaks
+  if ($address['country'] == 'ZA') {
+    // Locality
+    $format['locality_block']['locality'] = array_merge(
+      $format['locality_block']['locality'],
+      array(
+        '#weight' => 30,
+        '#prefix' => '',
+        '#tag' => 'div',
+      )
+   );
+
+    // Postal code
+    $format['locality_block']['postal_code'] = array_merge(
+      $format['locality_block']['postal_code'],
+      array(
+        '#title' => t('Postcode'),
+        '#weight' => 40,
+        '#prefix' => '',
+        '#tag' => 'div',
+      )
+    );
+
+    // Administrative
+    $format['locality_block']['administrative_area'] = array_merge(
+      $format['locality_block']['administrative_area'],
+      array(
+        '#weight' => 50,
         '#prefix' => '',
         '#tag' => 'div',
       )
