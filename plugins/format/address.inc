@@ -126,6 +126,27 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       ),
     );
   }
+  else if ($address['country'] == 'MY') {
+    $format['locality_block']['administrative_area']['#options'] = array(
+      ''   => t('--'),
+      '01' => t('Johor'),
+      '02' => t('Kedah'),
+      '03' => t('Kelantan'),
+      '14' => t('Kuala Lumpur'),
+      '15' => t('Labuan'),
+      '04' => t('Melaka'),
+      '05' => t('Negeri Sembilan'),
+      '06' => t('Pahang'),
+      '08' => t('Perak'),
+      '09' => t('Perlis'),
+      '07' => t('Pulau Pinang'),
+      '16' => t('Putrajaya'),
+      '12' => t('Sabah'),
+      '13' => t('Sarawak'),
+      '10' => t('Selangor'),
+      '11' => t('Terengganu'),
+    );
+  }
 
   // A few countries have a well-known list of administrative divisions.
   if ($address['country'] == 'US') {
