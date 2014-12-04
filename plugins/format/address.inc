@@ -537,6 +537,43 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       '11' => t('Terengganu'),
     );
   }
+  else if ($address['country'] == 'MX') {
+    $format['locality_block']['administrative_area']['#options'] = array(
+      '' => t('--'),
+      'AGU' => t('Aguascalientes'),
+      'BCN' => t('Baja California'),
+      'BCS' => t('Baja California Sur'),
+      'CAM' => t('Campeche'),
+      'COA' => t('Coahuila'),
+      'COL' => t('Colima'),
+      'CHP' => t('Chiapas'),
+      'CHH' => t('Chihuahua'),
+      'DIF' => t('Distrito Federal'),
+      'DUG' => t('Durango'),
+      'MEX' => t('Estado de México'),
+      'GUA' => t('Guanajuato'),
+      'GRO' => t('Guerrero'),
+      'HID' => t('Hidalgo'),
+      'JAL' => t('Jalisco'),
+      'MIC' => t('Michoacán'),
+      'MOR' => t('Morelos'),
+      'NAY' => t('Nayarit'),
+      'NLE' => t('Nuevo León'),
+      'OAX' => t('Oaxaca'),
+      'PUE' => t('Puebla'),
+      'QUE' => t('Queretaro'),
+      'ROO' => t('Quintana Roo'),
+      'SLP' => t('San Luis Potosí'),
+      'SIN' => t('Sinaloa'),
+      'SON' => t('Sonora'),
+      'TAB' => t('Tabasco'),
+      'TAM' => t('Tamaulipas'),
+      'TLA' => t('Tlaxcala'),
+      'VER' => t('Veracruz'),
+      'YUC' => t('Yucatán'),
+      'ZAC' => t('Zacatecas'),
+    );
+  }
   elseif ($address['country'] == 'IN') {
     $format['locality_block']['administrative_area']['#options'] = array(
       ''   => t('--'),
