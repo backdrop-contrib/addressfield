@@ -70,6 +70,14 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       'autocomplete' => 'postal-code',
     ),
   );
+  $format['locality_block']['dependent_locality'] = array(
+    '#title' => t('Suburb'),
+    '#tag' => 'div',
+    '#size' => 25,
+    '#attributes' => array(
+      'class' => array('dependent-locality')
+    ),
+  );
   $format['locality_block']['locality'] = array(
     '#title' => t('City'),
     '#size' => 30,
@@ -79,6 +87,17 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       'class' => array('locality'),
       'x-autocompletetype' => 'locality',
       'autocomplete' => 'locality',
+    ),
+  );
+  $format['locality_block']['administrative_area'] = array(
+    '#title' => t('State', array(), array('context' => 'Territory of a country')),
+    '#size' => 10,
+    '#required' => TRUE,
+    '#prefix' => ' ',
+    '#attributes' => array(
+      'class' => array('state'),
+      'x-autocompletetype' => 'region',
+      'autocomplete' => 'region',
     ),
   );
   $format['country'] = array(
@@ -124,6 +143,14 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['postal_code']['#required'] = TRUE;
   }
 
+  // These countries use the dependent locality in postal addresses.
+  $countries_dependent_localities = array(
+    'BR', 'CN', 'IR', 'KR', 'MX', 'MY', 'NZ', 'PH', 'TH', 'ZA',
+  );
+  if (!in_array($address['country'], $countries_dependent_localities)) {
+    unset($format['locality_block']['dependent_locality']);
+  }
+
   // These countries use the administrative area in postal addresses.
   $countries_administrative_area = array(
     'AE', 'AM', 'AR', 'AU', 'BR', 'BS', 'BY', 'CA', 'CL', 'CN', 'CO', 'CV', 'EG',
@@ -132,18 +159,8 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     'PA', 'PE', 'PF', 'PG', 'PH', 'PW', 'RU', 'SC', 'SO', 'SR', 'SV', 'TH', 'TR',
     'TV', 'TW', 'UA', 'US', 'UY', 'UZ', 'VE', 'VI', 'VN',
   );
-  if (in_array($address['country'], $countries_administrative_area)) {
-    $format['locality_block']['administrative_area'] = array(
-      '#title' => t('State', array(), array('context' => 'Territory of a country')),
-      '#size' => 10,
-      '#required' => TRUE,
-      '#prefix' => ' ',
-      '#attributes' => array(
-        'class' => array('state'),
-        'x-autocompletetype' => 'region',
-        'autocomplete' => 'region',
-      ),
-    );
+  if (!in_array($address['country'], $countries_administrative_area)) {
+    unset($format['locality_block']['administrative_area']);
   }
 
   // A few countries have a well-known list of administrative divisions.
@@ -395,13 +412,8 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['administrative_area']['#title'] = t('Province');
   }
   elseif ($address['country'] == 'BR') {
-    $format['locality_block']['dependent_locality'] = array(
-      '#title' => t('Neighborhood'),
-      '#tag' => 'div',
-      '#attributes' => array('class' => array('dependent-locality')),
-      '#size' => 25,
-      '#render_option_value' => FALSE,
-    );
+    $format['locality_block']['dependent_locality']['#title'] = t('Neighborhood');
+    $format['locality_block']['dependent_locality']['#tag'] = 'div';
     $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
     $format['locality_block']['administrative_area']['#options'] = array(
       '' => t('--'),
@@ -459,8 +471,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       $format['street_block']['premise']['#suffix'] = NULL;
       $format['locality_block']['locality']['#suffix'] = NULL;
     }
-    // Render an extra field for 'Neighborhood'.
-    $format['locality_block']['dependent_locality']['#render_option_value'] = TRUE;
     // Change some weights to conform local standards
     // Neighborhood.
     $format['locality_block']['dependent_locality']['#weight'] = 0;
@@ -688,8 +698,12 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['locality']['#title'] = t('City/Regency');
   }
 
-  // Those countries tend to put the postal code after the locality.
-  static $countries_postal_code_after_locality = array('AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BT', 'CA', 'FM', 'GB', 'ID', 'IN', 'JM', 'JO', 'KH', 'LB', 'LS', 'LV', 'MM', 'MN', 'MV', 'NG', 'NP', 'NZ', 'PK', 'PR', 'PW', 'SA', 'SG', 'SO', 'TH', 'US', 'VI', 'VG', 'VN');
+  // These countries tend to put the postal code after the locality.
+  $countries_postal_code_after_locality = array(
+    'AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BT', 'CA', 'CN', 'FM', 'GB', 'ID', 'IN',
+    'JM', 'JO', 'KH', 'KR', 'LB', 'LS', 'LV', 'MM', 'MN', 'MV', 'NG', 'NP', 'NZ',
+    'PK', 'PR', 'PW', 'SA', 'SG', 'SO', 'TH', 'US', 'VI', 'VG', 'VN', 'ZA',
+  );
   if (in_array($address['country'], $countries_postal_code_after_locality)) {
     // Take the widget out of the array.
     $postal_code_widget = $format['locality_block']['postal_code'];
