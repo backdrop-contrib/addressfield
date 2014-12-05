@@ -505,6 +505,44 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       $format['locality_block']['locality']['#suffix'] = ',';
     }
   }
+  else if ($address['country'] == 'CO') {
+    $format['locality_block']['administrative_area']['#options'] = array(
+      '' => t('--'),
+      'AMA' => t('Amazonas'),
+      'ANT' => t('Antioquia'),
+      'ARA' => t('Arauca'),
+      'ATL' => t('Atlántico'),
+      'BOL' => t('Bolívar'),
+      'BOY' => t('Boyacá'),
+      'CAL' => t('Caldas'),
+      'CAQ' => t('Caquetá'),
+      'CAS' => t('Casanare'),
+      'CAU' => t('Cauca'),
+      'CES' => t('Cesar'),
+      'COR' => t('Córdoba'),
+      'CUN' => t('Cundinamarca'),
+      'CHO' => t('Chocó'),
+      'GUA' => t('Guainía'),
+      'GUV' => t('Guaviare'),
+      'HUI' => t('Huila'),
+      'LAG' => t('La Guajira'),
+      'MAG' => t('Magdalena'),
+      'MET' => t('Meta'),
+      'NAR' => t('Nariño'),
+      'NSA' => t('Norte de Santander'),
+      'PUT' => t('Putumayo'),
+      'QUI' => t('Quindío'),
+      'RIS' => t('Risaralda'),
+      'SAP' => t('San Andrés, Providencia y Santa Catalina'),
+      'SAN' => t('Santander'),
+      'SUC' => t('Sucre'),
+      'TOL' => t('Tolima'),
+      'VAC' => t('Valle del Cauca'),
+      'VAU' => t('Vaupés'),
+      'VID' => t('Vichada'),
+    );
+    $format['locality_block']['administrative_area']['#title'] = t('Department');
+  }
   else if ($address['country'] == 'AU') {
     $format['locality_block']['administrative_area']['#options'] = array(
       '' => t('--'),
