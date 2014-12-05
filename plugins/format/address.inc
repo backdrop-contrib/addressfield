@@ -668,6 +668,48 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['administrative_area']['#weight'] = 1;
     $format['locality_block']['locality']['#weight'] = 2;
   }
+  elseif ($address['country'] == 'ID') {
+    $format['locality_block']['administrative_area']['#options'] = array(
+      '' => t('--'),
+      'AC' => t('Aceh'),
+      'BA' => t('Bali'),
+      'BB' => t('Bangka Belitung'),
+      'BT' => t('Banten'),
+      'BE' => t('Bengkulu'),
+      'JK' => t('DKI Jakarta'),
+      'YO' => t('D.I. Yogyakarta'),
+      'GO' => t('Gorontalo'),
+      'JA' => t('Jambi'),
+      'JB' => t('Jawa Barat'),
+      'JT' => t('Jawa Tengah'),
+      'JI' => t('Jawa Timur'),
+      'KB' => t('Kalimantan Barat'),
+      'KS' => t('Kalimantan Selatan'),
+      'KT' => t('Kalimantan Tengah'),
+      'KI' => t('Kalimantan Timur'),
+      'KR' => t('Kepulauan Riau'),
+      'LA' => t('Lampung'),
+      'MA' => t('Maluku'),
+      'MU' => t('Maluku Utara'),
+      'NB' => t('Nusa Tenggara Barat'),
+      'NT' => t('Nusa Tenggara Timur'),
+      'PA' => t('Papua'),
+      'PB' => t('Papua Barat'),
+      'RI' => t('Riau'),
+      'SR' => t('Sulawesi Barat'),
+      'SN' => t('Sulawesi Selatan'),
+      'ST' => t('Sulawesi Tengah'),
+      'SG' => t('Sulawesi Tenggara'),
+      'SA' => t('Sulawesi Utara'),
+      'SB' => t('Sumatera Barat'),
+      'SS' => t('Sumatera Selatan'),
+      'SU' => t('Sumatera Utara'),
+    );
+    $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
+    $format['locality_block']['administrative_area']['#title'] = t('Province');
+    $format['locality_block']['administrative_area']['#weight'] = 1;
+    $format['locality_block']['locality']['#title'] = t('City/Regency');
+  }
 
   // Those countries tend to put the postal code after the locality.
   static $countries_postal_code_after_locality = array('AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BT', 'CA', 'FM', 'GB', 'ID', 'IN', 'JM', 'JO', 'KH', 'LB', 'LS', 'LV', 'MM', 'MN', 'MV', 'NG', 'NP', 'NZ', 'PK', 'PR', 'PW', 'SA', 'SG', 'SO', 'TH', 'US', 'VI', 'VG', 'VN');
