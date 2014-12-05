@@ -128,7 +128,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   $countries_administrative_area = array(
     'AE', 'AM', 'AR', 'AU', 'BR', 'BS', 'BY', 'CA', 'CL', 'CN', 'CO', 'CV', 'EG',
     'ES', 'FM', 'GB', 'HK', 'HN', 'ID', 'IE', 'IN', 'IT', 'IQ', 'IR', 'JP', 'KI',
-    'KN', 'KR',  'KY', 'KZ', 'JM', 'MN', 'MX', 'MY', 'MZ', 'NG', 'NI', 'NR', 'NZ',
+    'KN', 'KR',  'KY', 'KZ', 'JM', 'MN', 'MX', 'MY', 'MZ', 'NG', 'NI', 'NR',
     'PA', 'PE', 'PF', 'PG', 'PH', 'PW', 'RU', 'SC', 'SO', 'SR', 'SV', 'TH', 'TR',
     'TV', 'TW', 'UA', 'US', 'UY', 'UZ', 'VE', 'VI', 'VN',
   );
@@ -511,29 +511,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   else if ($address['country'] == 'NZ') {
     $format['locality_block']['locality']['#title'] = ('Town/City');
     $format['locality_block']['postal_code']['#title'] = t('Postcode');
-    $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
-    $format['locality_block']['administrative_area']['#title'] = t('Region');
-    $format['locality_block']['administrative_area']['#required'] = FALSE;
-    $format['locality_block']['administrative_area']['#options'] = array(
-      ''   => t('--'),
-      'AUK' => t('Auckland'),
-      'BOP' => t('Bay of Plenty'),
-      'CAN' => t('Canterbury'),
-      'HKB' => t("Hawke's Bay"),
-      'MWT' => t('Manawatu-Wanganui'),
-      'NTL' => t('Northland'),
-      'OTA' => t('Otago'),
-      'STL' => t('Southland'),
-      'TKI' => t('Taranaki'),
-      'WKO' => t('Waikato'),
-      'WGN' => t('Wellington'),
-      'WTC' => t('West Coast'),
-      'GIS' => t('Gisborne District'),
-      'MBH' => t('Marlborough District'),
-      'NSN' => t('Nelson'),
-      'TAS' => t('Tasman District'),
-      'CIT' => t('Chatham Islands Territory'),
-    );
   }
   elseif ($address['country'] == 'MY') {
     $format['locality_block']['administrative_area']['#options'] = array(
