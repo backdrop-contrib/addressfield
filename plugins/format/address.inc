@@ -63,7 +63,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   $format['locality_block']['postal_code'] = array(
     '#title' => t('Postal code'),
     '#size' => 10,
-    '#required' => TRUE,
+    '#required' => FALSE,
     '#attributes' => array(
       'class' => array('postal-code'),
       'x-autocompletetype' => 'postal-code',
@@ -94,8 +94,14 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#weight' => 100,
   );
 
-  // Those countries do not seem to have a relevant postal code.
-  static $countries_no_postal_code = array('AF', 'AG', 'AO', 'BB', 'BI', 'BJ', 'BO', 'BS', 'BW', 'BZ', 'CF', 'CG', 'CM', 'CO', 'DJ', 'DM', 'EG', 'ER', 'FJ', 'GD', 'GH', 'GM', 'GQ', 'GY', 'HK', 'IE', 'KI', 'KM', 'KP', 'KY', 'LC', 'LY', 'ML', 'MR', 'MW', 'NA', 'NR', 'PE', 'RW', 'SB', 'SC', 'SL', 'SR', 'ST', 'TD', 'TG', 'TL', 'TO', 'TT', 'TV', 'TZ', 'UG', 'VC', 'VU', 'WS', 'ZW');
+  // Those countries do not use postal codes.
+  $countries_no_postal_code = array(
+    'AO', 'AE', 'AF', 'AG', 'AI', 'BF', 'BI', 'BJ', 'BO', 'BS', 'BW', 'BZ', 'CD',
+    'CF', 'CG', 'CI', 'CM', 'CO', 'DJ', 'DM', 'ER', 'FJ', 'GD', 'GH', 'GM', 'GQ',
+    'GY', 'HK', 'IE', 'JM', 'KI', 'KM', 'KN', 'KP', 'LC', 'LY', 'ML', 'MO', 'MR',
+    'MW', 'NR', 'PA', 'QA', 'RW', 'SB', 'SC', 'SL', 'SR', 'ST', 'TD', 'TG', 'TL',
+    'TO', 'TV', 'TZ', 'UG', 'VU', 'ZW',
+  );
   if (in_array($address['country'], $countries_no_postal_code)) {
     unset($format['locality_block']['postal_code']);
 
@@ -105,10 +111,17 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     unset($format['locality_block'][$first_child]['#prefix']);
   }
 
-  // These countries have optional postal codes.
-  static $countries_optional_postal_code = array('LB');
-  if (in_array($address['country'], $countries_optional_postal_code)) {
-    $format['locality_block']['postal_code']['#required'] = FALSE;
+  // These countries have required postal codes.
+  $countries_required_postal_code = array(
+    'AS', 'AT', 'AU', 'AX', 'BE', 'BL', 'BR', 'CA', 'CH', 'CN', 'DE', 'DK', 'ES',
+    'FI', 'FK', 'FM', 'FR', 'GB', 'GF', 'GG', 'GL', 'GP', 'GR', 'GS', 'GU', 'IM',
+    'IN', 'IO', 'IT', 'JE', 'JP', 'KR', 'LI', 'LU', 'MF', 'MH', 'MP', 'MQ', 'MX',
+    'MY', 'NC', 'NL', 'NO', 'NZ', 'PF', 'PL', 'PM', 'PN', 'PR', 'PT', 'PW', 'RE',
+    'RU', 'SE', 'SG', 'SH', 'SJ', 'SM', 'TC', 'TR', 'TW', 'UA', 'US', 'VI', 'WF',
+    'YT', 'ZA',
+  );
+  if (in_array($address['country'], $countries_required_postal_code)) {
+    $format['locality_block']['postal_code']['#required'] = TRUE;
   }
 
   // Those countries generally use the administrative area in postal addresses.
