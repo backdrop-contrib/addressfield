@@ -94,7 +94,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#weight' => 100,
   );
 
-  // Those countries do not use postal codes.
+  // These countries do not use postal codes.
   $countries_no_postal_code = array(
     'AO', 'AE', 'AF', 'AG', 'AI', 'BF', 'BI', 'BJ', 'BO', 'BS', 'BW', 'BZ', 'CD',
     'CF', 'CG', 'CI', 'CM', 'CO', 'DJ', 'DM', 'ER', 'FJ', 'GD', 'GH', 'GM', 'GQ',
@@ -124,8 +124,14 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['postal_code']['#required'] = TRUE;
   }
 
-  // Those countries generally use the administrative area in postal addresses.
-  static $countries_administrative_area = array('AR', 'AU', 'BR', 'BS', 'BY', 'BZ', 'CA', 'CN', 'DO', 'EG', 'ES', 'FJ', 'FM', 'GB', 'HN', 'ID', 'IE', 'IN', 'IT', 'JO', 'JP', 'KI', 'KN', 'KR', 'KW', 'KY', 'KZ', 'MX', 'MY', 'MZ', 'NG', 'NI', 'NR', 'NZ', 'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PR', 'PW', 'RU', 'SM', 'SO', 'SR', 'SV', 'TH', 'TW', 'UA', 'US', 'UY', 'VE', 'VI', 'VN', 'YU', 'ZA');
+  // These countries use the administrative area in postal addresses.
+  $countries_administrative_area = array(
+    'AE', 'AM', 'AR', 'AU', 'BR', 'BS', 'BY', 'CA', 'CL', 'CN', 'CO', 'CV', 'EG',
+    'ES', 'FM', 'GB', 'HK', 'HN', 'ID', 'IE', 'IN', 'IT', 'IQ', 'IR', 'JP', 'KI',
+    'KN', 'KR',  'KY', 'KZ', 'JM', 'MN', 'MX', 'MY', 'MZ', 'NG', 'NI', 'NR', 'NZ',
+    'PA', 'PE', 'PF', 'PG', 'PH', 'PW', 'RU', 'SC', 'SO', 'SR', 'SV', 'TH', 'TR',
+    'TV', 'TW', 'UA', 'US', 'UY', 'UZ', 'VE', 'VI', 'VN',
+  );
   if (in_array($address['country'], $countries_administrative_area)) {
     $format['locality_block']['administrative_area'] = array(
       '#title' => t('State', array(), array('context' => 'Territory of a country')),
