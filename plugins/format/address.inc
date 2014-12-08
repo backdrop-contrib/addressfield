@@ -234,6 +234,9 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   else if ($address['country'] == 'CO') {
     $format['locality_block']['administrative_area']['#title'] = t('Department');
   }
+  else if ($address['country'] == 'EG') {
+    $format['locality_block']['administrative_area']['#title'] = t('Governorate');
+  }
   else if ($address['country'] == 'NZ') {
     $format['locality_block']['locality']['#title'] = ('Town/City');
     $format['locality_block']['postal_code']['#title'] = t('Postcode');
