@@ -12,6 +12,43 @@
  */
 function addressfield_get_administrative_areas($country_code) {
   $administrative_areas = array();
+  $administrative_areas['AE'] = array(
+    '' => t('--'),
+    'AZ' => t('Abu Dhabi'),
+    'AJ' => t('Ajmān'),
+    'FU' => t('Fujairah'),
+    'SH' => t('Sharjah'),
+    'DU' => t('Dubai'),
+    'RK' => t('Ras al-Khaimah'),
+    'UQ' => t('Umm al-Quwain'),
+  );
+  $administrative_areas['AR'] = array(
+    '' => t('--'),
+    'B' => t('Buenos Aires'),
+    'K' => t('Catamarca'),
+    'H' => t('Chaco'),
+    'U' => t('Chubut'),
+    'C' => t('Ciudad de Buenos Aires'),
+    'X' => t('Córdoba'),
+    'W' => t('Corrientes'),
+    'E' => t('Entre Ríos'),
+    'P' => t('Formosa'),
+    'Y' => t('Jujuy'),
+    'L' => t('La Pampa'),
+    'F' => t('La Rioja'),
+    'M' => t('Mendoza'),
+    'N' => t('Misiones'),
+    'Q' => t('Neuquén'),
+    'R' => t('Río Negro'),
+    'A' => t('Salta'),
+    'J' => t('San Juan'),
+    'D' => t('San Luis'),
+    'Z' => t('Santa Cruz'),
+    'S' => t('Santa Fe'),
+    'G' => t('Santiago del Estero'),
+    'V' => t('Tierra del Fuego'),
+    'T' => t('Tucumán'),
+  );
   $administrative_areas['AU'] = array(
     '' => t('--'),
     'ACT' => t('Australian Capital Territory'),
@@ -68,6 +105,24 @@ function addressfield_get_administrative_areas($country_code) {
     'QC' => t('Quebec'),
     'SK' => t('Saskatchewan'),
     'YT' => t('Yukon Territory'),
+  );
+  $administrative_areas['CL'] = array(
+    '' => t('--'),
+    'AI' => t('Aysén del General Carlos Ibáñez del Campo'),
+    'AN' => t('Antofagasta'),
+    'AR' => t('Araucanía'),
+    'AP' => t('Arica y Parinacota'),
+    'AT' => t('Atacama'),
+    'BI' => t('Biobío'),
+    'CO' => t('Coquimbo'),
+    'LI' => t('Libertador General Bernardo O\'Higgins'),
+    'LL' => t('Los Lagos'),
+    'LR' => t('Los Ríos'),
+    'MA' => t('Magallanes y de la Antártica Chilena'),
+    'ML' => t('Maule'),
+    'RM' => t('Metropolitana de Santiago'),
+    'TA' => t('Tarapacá'),
+    'VS' => t('Valparaíso'),
   );
   $administrative_areas['CO'] = array(
     '' => t('--'),
@@ -188,6 +243,13 @@ function addressfield_get_administrative_areas($country_code) {
     'BI' => t('Vizcaya'),
     'ZA' => t('Zamora'),
     'Z' => t('Zaragoza'),
+  );
+  $administrative_areas['HK'] = array(
+    '' => t('--'),
+    // HK subdivisions have no ISO codes assigned.
+    'Kowloon' => t('Kowloon'),
+    'Hong Kong Island' => t('Hong Kong Island'),
+    'New Territories' => t('New Territories'),
   );
   $administrative_areas['ID'] = array(
     '' => t('--'),
@@ -379,6 +441,23 @@ function addressfield_get_administrative_areas($country_code) {
     'VS' => t('Medio Campidano'),
     'VT' => t('Viterbo'),
     'VV' => t('Vibo Valentia'),
+  );
+  $administrative_areas['JM'] = array(
+    ''   => t('--'),
+    '13' => 'Clarendon',
+    '09' => 'Hanover',
+    '01' => 'Kingston',
+    '12' => 'Manchester',
+    '04' => 'Portland',
+    '02' => 'St. Andrew',
+    '06' => 'St. Ann',
+    '14' => 'St. Catherine',
+    '11' => 'St. Elizabeth',
+    '08' => 'St. James',
+    '05' => 'St. Mary',
+    '03' => 'St. Thomas',
+    '07' => 'Trelawny',
+    '10' => 'Westmoreland',
   );
   $administrative_areas['JP'] = array(
     ''   => t('--'),
@@ -577,6 +656,34 @@ function addressfield_get_administrative_areas($country_code) {
     'PW' => t('Palau'),
     'PR' => t('Puerto Rico'),
     'VI' => t('Virgin Islands'),
+  );
+  $administrative_areas['VE'] = array(
+    ''   => t('--'),
+    'Z' => t('Amazonas'),
+    'B' => t('Anzoátegui'),
+    'C' => t('Apure'),
+    'D' => t('Aragua'),
+    'E' => t('Barinas'),
+    'F' => t('Bolívar'),
+    'G' => t('Carabobo'),
+    'H' => t('Cojedes'),
+    'Y' => t('Delta Amacuro'),
+    'W' => t('Dependencias Federales'),
+    'A' => t('Distrito Federal'),
+    'I' => t('Falcón'),
+    'J' => t('Guárico'),
+    'K' => t('Lara'),
+    'L' => t('Mérida'),
+    'M' => t('Miranda'),
+    'N' => t('Monagas'),
+    'O' => t('Nueva Esparta'),
+    'P' => t('Portuguesa'),
+    'R' => t('Sucre'),
+    'S' => t('Táchira'),
+    'T' => t('Trujillo'),
+    'X' => t('Vargas'),
+    'U' => t('Yaracuy'),
+    'V' => t('Zulia'),
   );
 
   return isset($administrative_areas[$country_code]) ? $administrative_areas[$country_code] : null;
