@@ -142,7 +142,10 @@ function addressfield_generate($address, array $handlers, array $context = array
 
   ctools_include('plugins');
   $format = array();
-  $format['#handlers'] = $handlers;
+  // Add the handlers, ordered by weight.
+  $plugins = addressfield_format_plugins();
+  $format['#handlers'] = array_intersect(array_keys($plugins), $handlers);
+
   foreach ($format['#handlers'] as $handler) {
     if ($callback = ctools_plugin_load_function('addressfield', 'format', $handler, 'format callback')) {
       $callback($format, $address, $context);
