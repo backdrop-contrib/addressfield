@@ -32,6 +32,7 @@ function addressfield_field_views_data($field) {
     'postal_code' => 'views_handler_field',
     'thoroughfare' => 'views_handler_field',
     'premise' => 'views_handler_field',
+    'sub_premise' => 'views_handler_field',
     'organisation_name' => 'views_handler_field',
     'name_line' => 'views_handler_field',
     'first_name' => 'views_handler_field',
