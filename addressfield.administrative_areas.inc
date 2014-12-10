@@ -827,5 +827,8 @@ function addressfield_get_administrative_areas($country_code) {
     'V' => t('Zulia'),
   );
 
+  // Allow other modules to alter the administrative areas.
+  drupal_alter('addressfield_administrative_areas', $administrative_areas);
+
   return isset($administrative_areas[$country_code]) ? $administrative_areas[$country_code] : null;
 }
