@@ -138,7 +138,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   }
 
   // Country-specific customizations.
-  if (in_array($address['country'], array('AU', 'NZ'))) {
+  if (in_array($address['country'], array('AU', 'NZ', 'RU'))) {
     // These countries don't use the "Address 2" line.
     // Leave it as a precaution, but hide the label to avoid confusing users.
     $format['street_block']['thoroughfare']['#title'] = t('Address');
