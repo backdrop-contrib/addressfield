@@ -532,6 +532,17 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
     // in that context, and it is overridable if necessary.
     $element['#type'] = 'fieldset';
 
+    if (!empty($instance['description'])) {
+      // Checkout panes convert the fieldset into a container, causing
+      // #description to not be rendered. Hence, a real element is added.
+      $element['element_description'] = array(
+        '#markup' =>  $instance['description'],
+        '#prefix' => '<div class="fieldset-description">',
+        '#suffix' => '</div>',
+        '#weight' => -999,
+      );
+    }
+
     // Generate the address form.
     $context = array(
       'mode' => 'form',
