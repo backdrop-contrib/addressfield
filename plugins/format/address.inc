@@ -210,7 +210,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   }
 
   // These countries show every field in its own row.
-  $countries_single_line = array(
+  $countries_field_per_row = array(
     'AM', 'EG', 'FK', 'GB', 'GG', 'GS', 'HK', 'HU', 'IE', 'IM', 'IO', 'JE', 'JM',
     'JP', 'KE', 'KR', 'KZ', 'LK', 'PA', 'PN', 'RU', 'SC', 'SH', 'SZ', 'TC', 'UA',
     'VG', 'ZA',
