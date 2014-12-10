@@ -145,8 +145,9 @@ function addressfield_get_address_format($country_code) {
     $address_formats['GB'] = array(
       'used_fields' => array('locality', 'administrative_area', 'postal_code'),
       'required_fields' => array('locality', 'postal_code'),
-      'locality_label' => t('Post town'),
+      'locality_label' => t('Town/City'),
       'administrative_area_label' => t('County'),
+      'postal_code_label' => t('Postcode'),
     );
     $address_formats['GI'] = array(
       'used_fields' => array('postal_code'),
