@@ -148,6 +148,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['dependent_locality']['#tag'] = 'div';
     $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
     $format['locality_block']['administrative_area']['#suffix'] = $clearfix;
+    $format['locality_block']['postal_code']['#tag'] = 'div';
     // Change some titles to make translation easier.
     $format['street_block']['#attributes'] = array(
       'class' => array('addressfield-container-inline'),
@@ -174,16 +175,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       $format['street_block']['premise']['#suffix'] = NULL;
       $format['locality_block']['locality']['#suffix'] = NULL;
     }
-    // Change some weights to conform local standards
-    // Neighborhood.
-    $format['locality_block']['dependent_locality']['#weight'] = 0;
-    // City.
-    $format['locality_block']['locality']['#weight'] = 5;
-    // State.
-    $format['locality_block']['administrative_area']['#weight'] = 10;
-    // Postal Code.
-    $format['locality_block']['postal_code']['#weight'] = 16;
-    $format['locality_block']['postal_code']['#tag'] = 'div';
   }
   elseif ($address['country'] == 'CN') {
     $format['locality_block']['locality']['#suffix'] = $clearfix;
@@ -212,9 +203,12 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
 
   // These countries tend to put the postal code after the locality.
   $countries_postal_code_after_locality = array(
-    'AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BT', 'CA', 'CN', 'FM', 'GB', 'ID', 'IN',
-    'JM', 'JO', 'KH', 'KR', 'LB', 'LS', 'LV', 'MM', 'MN', 'MV', 'NG', 'NP', 'NZ',
-    'PK', 'PR', 'PW', 'SA', 'SG', 'SO', 'TH', 'US', 'VI', 'VG', 'VN', 'ZA',
+    'AS', 'AU', 'BD', 'BF', 'BH', 'BM', 'BN', 'BR', 'BT', 'CA', 'CC', 'CN', 'CX',
+    'EG', 'FK', 'FM', 'GB', 'GG', 'GS', 'GU', 'HN', 'HU', 'ID', 'IL', 'IM', 'IN',
+    'IO', 'IQ', 'IR', 'JE', 'JO', 'JP', 'KE', 'KH', 'KR', 'LB', 'LK', 'LS', 'LV',
+    'MH', 'MM', 'MN', 'MP', 'MT', 'MV', 'MX', 'MY', 'NF', 'NG', 'NP', 'NZ', 'PG',
+    'PH', 'PK', 'PN', 'PR', 'PW', 'RU', 'SA', 'SH', 'SO', 'SZ', 'TC', 'TH', 'TW',
+    'UA', 'UM', 'US', 'VE', 'VI', 'VG', 'VN', 'ZA',
   );
   if (in_array($address['country'], $countries_postal_code_after_locality)) {
     // Take the widget out of the array.
