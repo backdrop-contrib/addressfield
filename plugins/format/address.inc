@@ -138,7 +138,13 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   }
 
   // Country-specific customizations.
-  if ($address['country'] == 'US') {
+  if (in_array($address['country'], array('AU', 'NZ'))) {
+    // These countries don't use the "Address 2" line.
+    // Leave it as a precaution, but hide the label to avoid confusing users.
+    $format['street_block']['thoroughfare']['#title'] = t('Address');
+    $format['street_block']['premise']['#title_display'] = 'invisible';
+  }
+  elseif ($address['country'] == 'US') {
     if ($context['mode'] == 'render') {
       $format['locality_block']['locality']['#suffix'] = ',';
     }
@@ -195,10 +201,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
     $format['locality_block']['locality']['#weight'] = 30;
     $format['street_block']['#weight'] = 20;
-  }
-  elseif ($address['country'] == 'NZ') {
-    $format['locality_block']['locality']['#title'] = ('Town/City');
-    $format['locality_block']['postal_code']['#title'] = t('Postcode');
   }
   elseif ($address['country'] == 'PE') {
     $format['locality_block']['administrative_area']['#weight'] = 1;

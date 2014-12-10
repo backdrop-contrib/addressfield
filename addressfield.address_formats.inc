@@ -86,7 +86,9 @@ function addressfield_get_address_format($country_code) {
   $address_formats['AU'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'required_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'locality_label' => t('City/Suburb'),
     'administrative_area_label' => t('State', array(), array('context' => 'Territory of a country')),
+    'postal_code_label' => t('Postcode'),
   );
   $address_formats['BR'] = array(
     'used_fields' => array('dependent_locality', 'locality', 'administrative_area', 'postal_code'),
@@ -275,6 +277,8 @@ function addressfield_get_address_format($country_code) {
   $address_formats['NZ'] = array(
     'used_fields' => array('dependent_locality', 'locality', 'postal_code'),
     'required_fields' => array('locality', 'postal_code'),
+    'locality_label' => t('Town/City'),
+    'postal_code_label' => t('Postcode'),
   );
   $address_formats['PA'] = array(
     'used_fields' => array('locality', 'administrative_area'),
