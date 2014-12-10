@@ -22,6 +22,9 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   module_load_include('inc', 'addressfield', 'addressfield.address_formats');
   $address_format = addressfield_get_address_format($address['country']);
 
+  // Used to move certain fields to their own row.
+  $clearfix = '<div class="clearfix"></div>';
+
   // The street block.
   $format['street_block'] = array(
     '#type' => 'addressfield_container',
@@ -80,6 +83,8 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#attributes' => array(
       'class' => array('dependent-locality')
     ),
+    // Most formats place this field in its own row.
+    '#suffix' => $clearfix,
   );
   $format['locality_block']['locality'] = array(
     '#title' => $address_format['locality_label'],
@@ -139,8 +144,10 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     }
   }
   elseif ($address['country'] == 'BR') {
+    $format['locality_block']['dependent_locality']['#suffix'] = $clearfix;
     $format['locality_block']['dependent_locality']['#tag'] = 'div';
     $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
+    $format['locality_block']['administrative_area']['#suffix'] = $clearfix;
     // Change some titles to make translation easier.
     $format['street_block']['#attributes'] = array(
       'class' => array('addressfield-container-inline'),
@@ -178,10 +185,17 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['postal_code']['#weight'] = 16;
     $format['locality_block']['postal_code']['#tag'] = 'div';
   }
+  elseif ($address['country'] == 'CN') {
+    $format['locality_block']['locality']['#suffix'] = $clearfix;
+  }
   elseif ($address['country'] == 'CA') {
     if ($context['mode'] == 'render') {
       $format['locality_block']['locality']['#suffix'] = ',';
     }
+  }
+  elseif ($address['country'] == 'ID') {
+    $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
+    $format['locality_block']['administrative_area']['#weight'] = 1;
   }
   elseif ($address['country'] == 'NZ') {
     $format['locality_block']['locality']['#title'] = ('Town/City');
@@ -191,9 +205,9 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['locality_block']['administrative_area']['#weight'] = 1;
     $format['locality_block']['locality']['#weight'] = 2;
   }
-  elseif ($address['country'] == 'ID') {
-    $format['locality_block']['administrative_area']['#render_option_value'] = TRUE;
-    $format['locality_block']['administrative_area']['#weight'] = 1;
+  elseif ($address['country'] == 'PH' || $address['country'] == 'TH') {
+    $format['locality_block']['dependent_locality']['#suffix'] = '';
+    $format['locality_block']['locality']['#suffix'] = $clearfix;
   }
 
   // These countries tend to put the postal code after the locality.
