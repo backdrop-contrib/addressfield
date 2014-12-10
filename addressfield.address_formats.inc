@@ -176,6 +176,7 @@ function addressfield_get_address_format($country_code) {
   );
   $address_formats['IE'] = array(
     'used_fields' => array('locality', 'administrative_area'),
+    'locality_label' => t('Town/City'),
     'administrative_area_label' => t('County'),
   );
   $address_formats['IN'] = array(
