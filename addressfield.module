@@ -159,7 +159,6 @@ function addressfield_generate($address, array $handlers, array $context = array
   if ($context['mode'] == 'form') {
     $format['#addressfield'] = TRUE;
     $format['#process'][] = 'addressfield_process_format_form';
-    $format['#required'] = FALSE;
   }
   elseif ($context['mode'] == 'render') {
     $format['#pre_render'][] = 'addressfield_render_address';
@@ -178,11 +177,11 @@ function addressfield_process_format_form($format, &$form_state, $complete_form)
     ctools_plugin_load_function('addressfield', 'format', $handler, 'format callback');
   }
 
-  _addressfield_process_format_form($format, $format['#address'], $format['#required']);
+  _addressfield_process_format_form($format, $format['#address']);
   return $format;
 }
 
-function _addressfield_process_format_form(&$format, $address, $required) {
+function _addressfield_process_format_form(&$format, $address) {
   foreach (element_children($format) as $key) {
     $child = &$format[$key];
 
@@ -208,17 +207,13 @@ function _addressfield_process_format_form(&$format, $address, $required) {
         }
       }
 
-      if (!$required) {
-        unset($child['#required']);
-      }
-
       if (isset($address[$key])) {
         $child['#default_value'] = $address[$key];
       }
     }
 
     // Recurse through the element's children if it has any.
-    _addressfield_process_format_form($child, $address, $required);
+    _addressfield_process_format_form($child, $address);
   }
 }
 
@@ -523,8 +518,16 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
     unset($address['country']);
   }
 
-  // Merge in default values to provide a value for every expected array key.
-  $address += addressfield_default_values($countries);
+  // Merge in default values.
+  // Skip the country default if the field is optional, in which case it might
+  // not have a country selected, causing the whole field to be treated as empty.
+  // The same logic applies if the field allows multiple values, in which case
+  // only the first delta is required.
+  $default_values = addressfield_default_values($countries);
+  if (empty($instance['required']) || $delta > 0) {
+    $default_values['country'] = '';
+  }
+  $address += $default_values;
 
   // Add the form elements for the standard widget, which includes a country
   // select list at the top that reloads the available address elements when the
@@ -555,9 +558,6 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
       'delta' => $delta,
     );
     $element += addressfield_generate($address, $settings['format_handlers'], $context);
-
-    // Mark the form element as required if necessary.
-    $element['#required'] = $delta == 0 && $instance['required'];
   }
 
   return $element;

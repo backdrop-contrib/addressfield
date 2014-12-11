@@ -42,7 +42,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       'autocomplete' => 'address-line1',
     ),
     '#size' => 30,
-    // The #required will be automatically set to FALSE when processing.
     '#required' => TRUE,
   );
   $format['street_block']['premise'] = array(
@@ -259,15 +258,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       $format['#prefix'] = '<div id="' . $format['#wrapper_id'] . '">';
       $format['#suffix'] = '</div>';
     }
-
-    // Form mode, move the country selector to the top of the form.
-    $format['country']['#weight'] = -10;
-
-    // Limit it to the countries supported by the widget.
-    if (isset($context['field'])) {
-      $format['country']['#options'] = _addressfield_country_options_list($context['field'], $context['instance']);
-    }
-
     // AJAX enable it.
     $format['country']['#ajax'] = array(
       'callback' => 'addressfield_standard_widget_refresh',
@@ -277,12 +267,25 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     // Don't validate any element when the country is changed.
     $format['country']['#limit_validation_errors'] = array();
 
-    if (isset($context['delta']) && $context['delta'] > 0) {
-      // On subsequent elements of a field, we make the country field non
-      // required and add a ' - None - ' option to it, so as to allow the
-      // user to remove the address by clearing the country field.
+    // Move the country selector to the top of the form.
+    $format['country']['#weight'] = -500;
+    // Limit it to the countries supported by the widget.
+    if (isset($context['field'])) {
+      $format['country']['#options'] = _addressfield_country_options_list($context['field'], $context['instance']);
+    }
+
+    // The whole field is considered empty if the country column is empty.
+    // Therefore, if the field is optional, allow the country to be optional.
+    // The same logic applies if the field allows multiple values, in which case
+    // only the first delta needs to have a value.
+    if (empty($context['instance']['required']) || (isset($context['delta']) && $context['delta'] > 0)) {
       $format['country']['#required'] = FALSE;
       $format['country']['#empty_value'] = '';
+      // Hide all other fields until the country is selected.
+      if (empty($address['country'])) {
+        $format['street_block']['#access'] = FALSE;
+        $format['locality_block']['#access'] = FALSE;
+      }
     }
   }
 }
