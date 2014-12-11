@@ -42,9 +42,13 @@ function addressfield_views_api() {
  */
 function addressfield_module_implements_alter(&$implementations, $hook) {
   if ($hook == 'token_info_alter') {
-    $group = $implementations['addressfield'];
-    unset($implementations['addressfield']);
-    $implementations['addressfield'] = $group;
+    // Make sure that the $implementations list is populated before altering it,
+    // to work around a crash experienced by some people (#2181001).
+    if (isset($implementations['addressfield'])) {
+      $group = $implementations['addressfield'];
+      unset($implementations['addressfield']);
+      $implementations['addressfield'] = $group;
+    }
   }
 }
 
