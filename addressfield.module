@@ -611,6 +611,9 @@ function addressfield_standard_widget_refresh($form, $form_state) {
   // new country select list.
   $commands[] = ajax_command_replace(NULL, render($element));
   $commands[] = ajax_command_invoke('#' . $element['country']['#id'], 'focus');
+  // Add the status messages inside the new addressfield's wrapper element,
+  // just like core does.
+  $commands[] = ajax_command_prepend(NULL, theme('status_messages'));
 
   // Allow other modules to add arbitrary AJAX commands on the refresh.
   drupal_alter('addressfield_standard_widget_refresh', $commands, $form, $form_state);
