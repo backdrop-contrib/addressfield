@@ -102,6 +102,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#title' => $address_format['administrative_area_label'],
     '#required' => in_array('administrative_area', $address_format['required_fields']),
     '#access' => in_array('administrative_area', $address_format['used_fields']),
+    '#empty_value' => '',
     '#size' => 10,
     '#prefix' => ' ',
     '#attributes' => array(

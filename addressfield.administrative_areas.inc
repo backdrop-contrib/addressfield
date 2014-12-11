@@ -13,7 +13,6 @@
 function addressfield_get_administrative_areas($country_code) {
   $administrative_areas = array();
   $administrative_areas['AE'] = array(
-    '' => t('--'),
     'AZ' => t('Abu Dhabi'),
     'AJ' => t('Ajmān'),
     'FU' => t('Fujairah'),
@@ -23,7 +22,6 @@ function addressfield_get_administrative_areas($country_code) {
     'UQ' => t('Umm al-Quwain'),
   );
   $administrative_areas['AR'] = array(
-    '' => t('--'),
     'B' => t('Buenos Aires'),
     'K' => t('Catamarca'),
     'H' => t('Chaco'),
@@ -50,7 +48,6 @@ function addressfield_get_administrative_areas($country_code) {
     'T' => t('Tucumán'),
   );
   $administrative_areas['AU'] = array(
-    '' => t('--'),
     'ACT' => t('Australian Capital Territory'),
     'NSW' => t('New South Wales'),
     'NT' => t('Northern Territory'),
@@ -61,7 +58,6 @@ function addressfield_get_administrative_areas($country_code) {
     'WA' => t('Western Australia'),
   );
   $administrative_areas['BR'] = array(
-    '' => t('--'),
     'AC' => t('Acre'),
     'AL' => t('Alagoas'),
     'AM' => t('Amazonas'),
@@ -91,7 +87,6 @@ function addressfield_get_administrative_areas($country_code) {
     'TO' => t('Tocantins'),
   );
   $administrative_areas['CA'] = array(
-    '' => t('--'),
     'AB' => t('Alberta'),
     'BC' => t('British Columbia'),
     'MB' => t('Manitoba'),
@@ -107,7 +102,6 @@ function addressfield_get_administrative_areas($country_code) {
     'YT' => t('Yukon Territory'),
   );
   $administrative_areas['CL'] = array(
-    '' => t('--'),
     'AI' => t('Aysén del General Carlos Ibáñez del Campo'),
     'AN' => t('Antofagasta'),
     'AR' => t('Araucanía'),
@@ -125,7 +119,6 @@ function addressfield_get_administrative_areas($country_code) {
     'VS' => t('Valparaíso'),
   );
   $administrative_areas['CN'] = array(
-    '' => t('--'),
     '34' => t('Anhui Sheng'),
     '92' => t('Macau'),
     '11' => t('Beijing Shi'),
@@ -162,7 +155,6 @@ function addressfield_get_administrative_areas($country_code) {
     '33' => t('Zhejiang Sheng'),
   );
   $administrative_areas['CO'] = array(
-    '' => t('--'),
     'AMA' => t('Amazonas'),
     'ANT' => t('Antioquia'),
     'ARA' => t('Arauca'),
@@ -197,7 +189,6 @@ function addressfield_get_administrative_areas($country_code) {
     'VID' => t('Vichada'),
   );
   $administrative_areas['EG'] = array(
-    '' => t('--'),
     'ALX' => t('Alexandria'),
     'ASN' => t('Aswan'),
     'AST' => t('Asyut'),
@@ -227,7 +218,6 @@ function addressfield_get_administrative_areas($country_code) {
     'LX' => t('Luxor'),
   );
   $administrative_areas['ES'] = array(
-    '' => t('--'),
     'C' => t("A Coruña"),
     'VI' => t('Alava'),
     'AB' => t('Albacete'),
@@ -282,14 +272,12 @@ function addressfield_get_administrative_areas($country_code) {
     'Z' => t('Zaragoza'),
   );
   $administrative_areas['HK'] = array(
-    '' => t('--'),
     // HK subdivisions have no ISO codes assigned.
     'Kowloon' => t('Kowloon'),
     'Hong Kong Island' => t('Hong Kong Island'),
     'New Territories' => t('New Territories'),
   );
   $administrative_areas['ID'] = array(
-    '' => t('--'),
     'AC' => t('Aceh'),
     'BA' => t('Bali'),
     'BB' => t('Bangka Belitung'),
@@ -325,7 +313,6 @@ function addressfield_get_administrative_areas($country_code) {
     'SU' => t('Sumatera Utara'),
   );
   $administrative_areas['IE'] = array(
-    ''   => t('--'),
     'CW' => t('Co Carlow'),
     'CN' => t('Co Cavan'),
     'CE' => t('Co Clare'),
@@ -379,7 +366,6 @@ function addressfield_get_administrative_areas($country_code) {
     'WW' => t('Co Wicklow'),
   );
   $administrative_areas['IN'] = array(
-    ''   => t('--'),
     'AP' => t('Andhra Pradesh'),
     'AR' => t('Arunachal Pradesh'),
     'AS' => t('Assam'),
@@ -421,7 +407,6 @@ function addressfield_get_administrative_areas($country_code) {
     'PY' => t('Puducherry'),
   );
   $administrative_areas['IT'] = array(
-    '' => t('--'),
     'AG' => t('Agrigento'),
     'AL' => t('Alessandria'),
     'AN' => t('Ancona'),
@@ -534,7 +519,6 @@ function addressfield_get_administrative_areas($country_code) {
     'VV' => t('Vibo Valentia'),
   );
   $administrative_areas['JM'] = array(
-    ''   => t('--'),
     '13' => 'Clarendon',
     '09' => 'Hanover',
     '01' => 'Kingston',
@@ -551,7 +535,6 @@ function addressfield_get_administrative_areas($country_code) {
     '10' => 'Westmoreland',
   );
   $administrative_areas['JP'] = array(
-    ''   => t('--'),
     '01' => t('Hokkaido'),
     '02' => t('Aomori'),
     '03' => t('Iwate'),
@@ -601,7 +584,6 @@ function addressfield_get_administrative_areas($country_code) {
     '47' => t('Okinawa'),
   );
   $administrative_areas['KR'] = array(
-    '' => t('--'),
     '11' => t('Seoul'),
     '26' => t('Busan'),
     '27' => t('Daegu'),
@@ -621,7 +603,6 @@ function addressfield_get_administrative_areas($country_code) {
     '50' => t('Sejong'),
   );
   $administrative_areas['MX'] = array(
-    '' => t('--'),
     'AGU' => t('Aguascalientes'),
     'BCN' => t('Baja California'),
     'BCS' => t('Baja California Sur'),
@@ -656,7 +637,6 @@ function addressfield_get_administrative_areas($country_code) {
     'ZAC' => t('Zacatecas'),
   );
   $administrative_areas['MY'] = array(
-    ''   => t('--'),
     '01' => t('Johor'),
     '02' => t('Kedah'),
     '03' => t('Kelantan'),
@@ -675,7 +655,6 @@ function addressfield_get_administrative_areas($country_code) {
     '11' => t('Terengganu'),
     );
   $administrative_areas['PE'] = array(
-    ''   => t('--'),
     'AMA' => t('Amazonas'),
     'ANC' => t('Ancash'),
     'APU' => t('Apurimac'),
@@ -703,7 +682,6 @@ function addressfield_get_administrative_areas($country_code) {
     'UCA' => t('Ucayali'),
   );
   $administrative_areas['RU'] = array(
-    '' => t('--'),
     'MOW' => t('Moskva'),
     'SPE' => t('Sankt-Peterburg'),
     'AD' => t('Adygeya, Respublika'),
@@ -789,7 +767,6 @@ function addressfield_get_administrative_areas($country_code) {
     'YAN' => t('Yamalo-Nenetskiy avtonomnyy okrug'),
   );
   $administrative_areas['TR'] = array(
-    ''   => t('--'),
     '01' => t('Adana'),
     '02' => t('Adıyaman'),
     '03' => t('Afyon'),
@@ -873,7 +850,6 @@ function addressfield_get_administrative_areas($country_code) {
     '67' => t('Zonguldak'),
   );
   $administrative_areas['US'] = array(
-    ''   => t('--'),
     'AL' => t('Alabama'),
     'AK' => t('Alaska'),
     'AZ' => t('Arizona'),
@@ -939,7 +915,6 @@ function addressfield_get_administrative_areas($country_code) {
     'VI' => t('Virgin Islands'),
   );
   $administrative_areas['VE'] = array(
-    ''   => t('--'),
     'Z' => t('Amazonas'),
     'B' => t('Anzoátegui'),
     'C' => t('Apure'),
