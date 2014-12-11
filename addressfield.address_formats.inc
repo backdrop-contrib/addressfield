@@ -358,6 +358,7 @@ function addressfield_get_address_format($country_code) {
   $address_formats['UA'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'required_fields' => array('locality', 'postal_code'),
+    'administrative_area_label' => t('Region', array(), array('context' => 'Territory of a country')),
   );
   $address_formats['UM'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
