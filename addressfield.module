@@ -177,11 +177,11 @@ function addressfield_process_format_form($format, &$form_state, $complete_form)
     ctools_plugin_load_function('addressfield', 'format', $handler, 'format callback');
   }
 
-  _addressfield_process_format_form($format, $format['#address']);
+  _addressfield_process_format_form($format, $format['#address'], $format['#required']);
   return $format;
 }
 
-function _addressfield_process_format_form(&$format, $address) {
+function _addressfield_process_format_form(&$format, $address, $required) {
   foreach (element_children($format) as $key) {
     $child = &$format[$key];
 
@@ -207,13 +207,17 @@ function _addressfield_process_format_form(&$format, $address) {
         }
       }
 
+      if (!$required) {
+        unset($child['#required']);
+      }
+
       if (isset($address[$key])) {
         $child['#default_value'] = $address[$key];
       }
     }
 
     // Recurse through the element's children if it has any.
-    _addressfield_process_format_form($child, $address);
+    _addressfield_process_format_form($child, $address, $required);
   }
 }
 
@@ -558,6 +562,10 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
       'delta' => $delta,
     );
     $element += addressfield_generate($address, $settings['format_handlers'], $context);
+
+    // If #required is set to FALSE, _addressfield_process_format_form() strips
+    // it from all child elements. This is only needed on the field edit form.
+    $element['#required'] = ($form_state['build_info']['form_id'] != 'field_ui_field_edit_form');
   }
 
   return $element;
