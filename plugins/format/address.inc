@@ -17,7 +17,7 @@ $plugin = array(
  *
  * @see CALLBACK_addressfield_format_callback()
  */
-function addressfield_format_address_generate(&$format, $address, $context = array()) {
+function addressfield_format_address_generate(&$format, &$address, $context = array()) {
   // Load the predefined address format for the selected country.
   module_load_include('inc', 'addressfield', 'addressfield.address_formats');
   $address_format = addressfield_get_address_format($address['country']);
@@ -271,7 +271,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     $format['country']['#weight'] = -500;
     // Limit it to the countries supported by the widget.
     if (isset($context['field'])) {
-      $format['country']['#options'] = _addressfield_country_options_list($context['field'], $context['instance']);
+      $format['country']['#options'] = $context['available_countries'];
     }
 
     // The whole field is considered empty if the country column is empty.
@@ -285,6 +285,20 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
       if (empty($address['country'])) {
         $format['street_block']['#access'] = FALSE;
         $format['locality_block']['#access'] = FALSE;
+      }
+    }
+    else {
+      // The field is required and no handler has provided a default country.
+      if (empty($address['country'])) {
+        // Use the default country of the site if possible.
+        $default_country = variable_get('site_default_country', NULL);
+        // If the default country is undefined or not in the list of available
+        // countries, fallback to the first country in the list.
+        if (!$default_country || !isset($context['available_countries'][$default_country])) {
+          $default_country = key($context['available_countries']);
+        }
+
+        $address['country'] = $default_country;
       }
     }
   }
