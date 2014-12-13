@@ -366,9 +366,22 @@ function addressfield_field_info() {
 /**
  * Returns an array of default values for the addressfield form elements.
  */
-function addressfield_default_values() {
+function addressfield_default_values($available_countries = NULL) {
+  if (!isset($available_countries)) {
+    $available_countries = _addressfield_country_options_list();
+  }
+
+  // Use the default country of the site if possible.
+  $default_country = variable_get('site_default_country', NULL);
+
+  // If the default country is undefined or not in the list of available countries,
+  // just fallback to the first country in the list.
+  if (!$default_country || !isset($available_countries[$default_country])) {
+    $default_country = key($available_countries);
+  }
+
   return array(
-    'country' => '',
+    'country' => $default_country,
     'name_line' => '',
     'first_name' => '',
     'last_name' => '',
@@ -515,7 +528,15 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
   }
 
   // Merge in default values.
-  $address += addressfield_default_values();
+  // Skip the country default if the field is optional, in which case it might
+  // not have a country selected, causing the whole field to be treated as empty.
+  // The same logic applies if the field allows multiple values, in which case
+  // only the first delta is required.
+  $default_values = addressfield_default_values($countries);
+  if (empty($instance['required']) || $delta > 0) {
+    $default_values['country'] = '';
+  }
+  $address += $default_values;
 
   // Add the form elements for the standard widget, which includes a country
   // select list at the top that reloads the available address elements when the
@@ -540,7 +561,6 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
     // Generate the address form.
     $context = array(
       'mode' => 'form',
-      'available_countries' => $countries,
       'field' => $field,
       'instance' => $instance,
       'langcode' => $langcode,
@@ -744,10 +764,23 @@ function addressfield_property_info_callback(&$info, $entity_type, $field, $inst
   $property['type'] = ($field['cardinality'] != 1) ? 'list<addressfield>' : 'addressfield';
   $property['getter callback'] = 'entity_metadata_field_verbatim_get';
   $property['setter callback'] = 'entity_metadata_field_verbatim_set';
-  $property['auto creation'] = 'addressfield_default_values';
+  $property['auto creation'] = 'addressfield_auto_creation';
   $property['property info'] = addressfield_data_property_info();
 
   unset($property['query callback']);
+}
+
+/**
+ * Auto creation callback for an addressfield value array.
+ *
+ * @see addressfield_property_info_callback()
+ */
+function addressfield_auto_creation() {
+  // We can't call addressfield_default_values() directly, because it has an
+  // optional array argument that will receive an invalid value when Entity API
+  // tries to call it directly with its usual $property_name and $context
+  // arguments.
+  return addressfield_default_values();
 }
 
 /**
