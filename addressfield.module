@@ -429,7 +429,7 @@ function addressfield_field_presave($entity_type, $entity, $field, $instance, $l
     // Trim whitespace from all of the address components and convert any double
     // spaces to single spaces.
     foreach ($item as $key => &$value) {
-      if (!in_array($key, array('element_key', 'data')) && is_string($value)) {
+      if (!in_array($key, array('data')) && is_string($value)) {
         $value = trim(str_replace('  ', ' ', $value));
       }
     }
@@ -490,34 +490,18 @@ function addressfield_field_widget_settings_form($field, $instance) {
 function addressfield_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $settings = $instance['widget']['settings'];
 
-  // Generate a specific key used to identify this element to restore a default
-  // value upon AJAX submission regardless of where this element is in the
-  // $form array.
-  $element_key = implode('|', array($element['#entity_type'], $element['#bundle'], $element['#field_name'], $element['#language'], $element['#delta']));
-
-  // Store the key in the element array as a value so it can be easily retrieved
-  // in context in the $form_state['values'] array in the element validator.
-  $element['element_key'] = array(
-    '#type' => 'value',
-    '#value' => $element_key,
-  );
-
-  // Get the default address used to build the widget form elements, looking
-  // first in the form state, then in the stored value for the field, and then
-  // in the default values of the instance.
   $address = array();
-
-  if (!empty($form_state['addressfield'][$element_key])) {
-    // Use the value from the form_state if available.
-    $address = $form_state['addressfield'][$element_key];
+  // If the form has been rebuilt via AJAX, use the form state values.
+  // $form_state['values'] is empty because of #limit_validation_errors, so
+  // $form_state['input'] needs to be used instead.
+  $parents = array_merge($element['#field_parents'], array($element['#field_name'], $langcode, $delta));
+  $input_address = drupal_array_get_nested_value($form_state['input'], $parents);
+  if (!empty($input_address)) {
+    $address = $input_address;
   }
   elseif (!empty($items[$delta]['country'])) {
     // Else use the saved value for the field.
     $address = $items[$delta];
-  }
-  else {
-    // Otherwise use the instance default.
-    $address = (array) $instance['default_value'][0];
   }
 
   // Determine the list of available countries, and if the currently selected
@@ -577,24 +561,12 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
 }
 
 /**
- * Element validate callback: rebuilds the form on country change and stores the
- * current address value in the $form_state for retrieval on rebuild.
+ * Element validate callback: rebuilds the form on country change.
  */
 function addressfield_standard_country_validate($element, &$form_state) {
-  // If the country was changed, rebuild the form.
   if ($element['#default_value'] != $element['#value']) {
     $form_state['rebuild'] = TRUE;
   }
-
-  $parents = $element['#parents'];
-  array_pop($parents);
-
-  // Search through the form values to find the current address.
-  $address = drupal_array_get_nested_value($form_state['values'], $parents);
-
-  // Store the present address values in the form state for retrieval by the
-  // widget form regardless of where the widget sits in the $form array.
-  $form_state['addressfield'][$address['element_key']] = array_diff_key($address, array('element_key' => ''));
 }
 
 /**
