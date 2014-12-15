@@ -834,7 +834,7 @@ function addressfield_data_property_info($name = NULL) {
 }
 
 /**
- * Wraps country_get_list() for use as an Entity API options list.
+ * Returns the country list in a format suitable for use as an options list.
  */
 function _addressfield_country_options_list($field = NULL, $instance = NULL) {
   if (module_exists('countries')) {
@@ -862,8 +862,6 @@ function _addressfield_country_options_list($field = NULL, $instance = NULL) {
     foreach ($instances as $instance) {
       if (!empty($instance['widget']['settings']['available_countries'])) {
         $countries = array_intersect_key($countries, $instance['widget']['settings']['available_countries']);
-      }
-      else {
         break;
       }
     }
