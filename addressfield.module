@@ -361,8 +361,18 @@ function addressfield_field_info() {
 
 /**
  * Returns an array of default values for the addressfield form elements.
+ *
+ * @param $field
+ *   The field array.
+ * @param $instance
+ *   The instance array.
+ * @param $address
+ *   The current address values, if known. Allows for per-country defaults.
+ *
+ * @return
+ *   An array of default values.
  */
-function addressfield_default_values($field, $instance) {
+function addressfield_default_values($field, $instance, array $address = array()) {
   $available_countries = _addressfield_country_options_list($field, $instance);
   $default_country = $instance['widget']['settings']['default_country'];
   // If the default country is not in the list of available countries,
@@ -371,7 +381,7 @@ function addressfield_default_values($field, $instance) {
     $default_country = key($available_countries);
   }
 
-  return array(
+  $default_values = array(
     'country' => $default_country,
     'name_line' => '',
     'first_name' => '',
@@ -387,6 +397,16 @@ function addressfield_default_values($field, $instance) {
     'sub_premise' => '',
     'data' => '',
   );
+
+  // Allow other modules to alter the default values.
+  $context = array(
+    'field' => $field,
+    'instance' => $instance,
+    'address' => $address,
+  );
+  drupal_alter('addressfield_default_values', $default_values, $context);
+
+  return $default_values;
 }
 
 /**
@@ -523,7 +543,7 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
   }
 
   // Merge in default values.
-  $address += addressfield_default_values($field, $instance);
+  $address += addressfield_default_values($field, $instance, $address);
 
   // Add the form elements for the standard widget, which includes a country
   // select list at the top that reloads the available address elements when the
