@@ -837,10 +837,13 @@ function addressfield_data_property_info($name = NULL) {
  * Wraps country_get_list() for use as an Entity API options list.
  */
 function _addressfield_country_options_list($field = NULL, $instance = NULL) {
-  // Necessary for country_get_list().
-  require_once DRUPAL_ROOT . '/includes/locale.inc';
-
-  $countries = country_get_list();
+  if (module_exists('countries')) {
+    $countries = countries_get_countries('name', array('enabled' => COUNTRIES_ENABLED));
+  }
+  else {
+    require_once DRUPAL_ROOT . '/includes/locale.inc';
+    $countries = country_get_list();
+  }
 
   if (isset($field)) {
     // If the instance is not specified, loop against all the instances of the field.
@@ -861,8 +864,6 @@ function _addressfield_country_options_list($field = NULL, $instance = NULL) {
         $countries = array_intersect_key($countries, $instance['widget']['settings']['available_countries']);
       }
       else {
-        // This instance allow all the countries.
-        $countries = country_get_list();
         break;
       }
     }
