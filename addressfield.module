@@ -565,6 +565,22 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
  */
 function addressfield_standard_country_validate($element, &$form_state) {
   if ($element['#default_value'] != $element['#value']) {
+    $parents = $element['#parents'];
+    array_pop($parents);
+    $address = drupal_array_get_nested_value($form_state['values'], $parents);
+
+    // Clear the country-specific field values.
+    $country_specific_data = array(
+      'dependent_locality' => '',
+      'locality' => '',
+      'administrative_area' => '',
+      'postal_code' => '',
+    );
+    $address = array_diff_key($address, $country_specific_data);
+
+    drupal_array_set_nested_value($form_state['values'], $parents, $address);
+    drupal_array_set_nested_value($form_state['input'], $parents, $address);
+
     $form_state['rebuild'] = TRUE;
   }
 }
