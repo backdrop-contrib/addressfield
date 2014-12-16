@@ -556,7 +556,9 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
 
     if (!empty($instance['description'])) {
       // Checkout panes convert the fieldset into a container, causing
-      // #description to not be rendered. Hence, a real element is added.
+      // #description to not be rendered. Hence, a real element is added and
+      // the old #description is removed.
+      $element['#description'] = '';
       $element['element_description'] = array(
         '#markup' =>  $instance['description'],
         '#prefix' => '<div class="fieldset-description">',
