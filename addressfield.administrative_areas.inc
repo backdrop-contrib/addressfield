@@ -14,12 +14,12 @@ function addressfield_get_administrative_areas($country_code) {
   $administrative_areas = array();
   $administrative_areas['AE'] = array(
     'AZ' => t('Abu Dhabi'),
-    'AJ' => t('Ajmān'),
     'FU' => t('Fujairah'),
+    'UQ' => t('Umm al-Quwain'),
     'SH' => t('Sharjah'),
     'DU' => t('Dubai'),
     'RK' => t('Ras al-Khaimah'),
-    'UQ' => t('Umm al-Quwain'),
+    'AJ' => t('Ajmān'),
   );
   $administrative_areas['AR'] = array(
     'B' => t('Buenos Aires'),
