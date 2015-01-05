@@ -228,6 +228,7 @@ function addressfield_get_address_format($country_code) {
   );
   $address_formats['KZ'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'required_fields' => array('locality', 'administrative_area', 'postal_code'),
   );
   $address_formats['MH'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
