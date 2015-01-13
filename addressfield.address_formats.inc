@@ -38,12 +38,11 @@ function addressfield_get_address_format($country_code) {
   // postal code in 'used_fields'.
   $countries_with_optional_postal_code = array(
     'AC', 'AD', 'AL', 'AZ', 'BA', 'BB', 'BD', 'BG', 'BH', 'BM', 'BN', 'BT',
-    'CR', 'CY', 'CZ', 'DO', 'DZ', 'EC', 'EE', 'EH', 'ET', 'FO', 'GE', 'GN',
-    'GT', 'GW', 'HR', 'HT', 'HU', 'IL', 'IS', 'JO', 'KE', 'KG', 'KH', 'KW',
-    'LA', 'LB', 'LK', 'LR', 'LS', 'LT', 'LV', 'MA', 'MC', 'MD', 'ME', 'MG',
-    'MK', 'MM', 'MT', 'MU', 'MV', 'NE', 'NP', 'OM', 'PK', 'PY', 'RO', 'RS',
-    'SA', 'SI', 'SK', 'SN', 'SZ', 'TA', 'TJ', 'TM', 'TN', 'VA', 'VC', 'VG',
-    'XK', 'ZM',
+    'CR', 'CY', 'CZ', 'DO', 'DZ', 'EC', 'EH', 'ET', 'FO', 'GE', 'GN', 'GT',
+    'GW', 'HR', 'HT', 'HU', 'IL', 'IS', 'JO', 'KE', 'KG', 'KH', 'KW', 'LA',
+    'LA', 'LB', 'LK', 'LR', 'LS',  'MA', 'MC', 'MD', 'ME', 'MG', 'MK', 'MM',
+    'MT', 'MU', 'MV', 'NE', 'NP', 'OM', 'PK', 'PY', 'RO', 'RS', 'SA', 'SI',
+    'SK', 'SN', 'SZ', 'TA', 'TJ', 'TM', 'TN', 'VA', 'VC', 'VG', 'XK', 'ZM',
   );
   foreach ($countries_with_optional_postal_code as $code) {
     $address_formats[$code] = array(
@@ -133,6 +132,11 @@ function addressfield_get_address_format($country_code) {
   $address_formats['EG'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'administrative_area_label' => t('Governorate'),
+  );
+  $address_formats['EE'] = array(
+    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'required_fields' => array('locality', 'postal_code'),
+    'administrative_area_label' => t('County'),
   );
   $address_formats['ES'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
@@ -229,6 +233,16 @@ function addressfield_get_address_format($country_code) {
   $address_formats['KZ'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'required_fields' => array('locality', 'administrative_area', 'postal_code'),
+  );
+  $address_formats['LT'] = array(
+    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'required_fields' => array('locality', 'postal_code'),
+    'administrative_area_label' => t('County'),
+  );
+  $address_formats['LV'] = array(
+    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'required_fields' => array('locality', 'postal_code'),
+    'administrative_area_label' => t('Municipality'),
   );
   $address_formats['MH'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
