@@ -188,6 +188,23 @@ function addressfield_get_administrative_areas($country_code) {
     'VAU' => t('Vaupés'),
     'VID' => t('Vichada'),
   );
+  $administrative_areas['EE'] = array(
+    '37' => t('Harjumaa'),
+    '39' => t('Hiiumaa'),
+    '44' => t('Ida-Virumaa'),
+    '49' => t('Jõgevamaa'),
+    '51' => t('Järvamaa'),
+    '57' => t('Läänemaa'),
+    '59' => t('Lääne-Virumaa'),
+    '65' => t('Põlvamaa'),
+    '67' => t('Pärnumaa'),
+    '70' => t('Raplamaa'),
+    '74' => t('Saaremaa'),
+    '78' => t('Tartumaa'),
+    '82' => t('Valgamaa'),
+    '84' => t('Viljandimaa'),
+    '86' => t('Võrumaa'),
+  );
   $administrative_areas['EG'] = array(
     'ALX' => t('Alexandria'),
     'ASN' => t('Aswan'),
