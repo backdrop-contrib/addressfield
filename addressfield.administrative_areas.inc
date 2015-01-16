@@ -619,6 +619,24 @@ function addressfield_get_administrative_areas($country_code) {
     '46' => t('Jeollanam-do'),
     '50' => t('Sejong'),
   );
+  $administrative_areas['KZ'] = array(
+    'AST' => t('Astana'),
+    'ALA' => t('Almaty'),
+    'ALM' => t('Almaty region'),
+    'AKM' => t('Aqmola region'),
+    'AKT' => t('Aqtöbe region'),
+    'ATY' => t('Atyraū region'),
+    'ZAP' => t('Batys Qazaqstan region'),
+    'MAN' => t('Mangghystaū region'),
+    'YUZ' => t('Ongtüstik Qazaqstan region'),
+    'PAV' => t('Pavlodar region'),
+    'KAR' => t('Qaraghandy region'),
+    'KUS' => t('Qostanay region'),
+    'KZY' => t('Qyzylorda region'),
+    'VOS' => t('Shyghys Qazaqstan region'),
+    'SEV' => t('Soltüstik Qazaqstan region'),
+    'ZHA' => t('Zhambyl region'),
+  );
   $administrative_areas['MX'] = array(
     'AGU' => t('Aguascalientes'),
     'BCN' => t('Baja California'),
