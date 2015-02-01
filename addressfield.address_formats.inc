@@ -343,6 +343,7 @@ function addressfield_get_address_format($country_code) {
   $address_formats['RU'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'required_fields' => array('locality', 'postal_code'),
+    'render_administrative_area_value' => TRUE,
   );
   $address_formats['SC'] = array(
     'used_fields' => array('locality', 'administrative_area'),
