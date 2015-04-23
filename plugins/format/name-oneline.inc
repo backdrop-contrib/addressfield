@@ -35,6 +35,7 @@ function addressfield_format_name_oneline_generate(&$format, $address) {
       'autocomplete' => 'name',
     ),
     '#size' => 30,
+    '#maxlength' => 255,
     '#required' => TRUE,
   );
 }
