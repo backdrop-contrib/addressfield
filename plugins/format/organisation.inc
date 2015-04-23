@@ -32,7 +32,6 @@ function addressfield_format_organisation_generate(&$format, $address) {
     '#maxlength' => 255,
     '#attributes' => array(
       'class' => array('organisation-name'),
-      'x-autocompletetype' => 'organization',
       'autocomplete' => 'organization',
     ),
   );

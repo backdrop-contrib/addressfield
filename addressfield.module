@@ -298,10 +298,9 @@ function addressfield_theme() {
 function theme_addressfield_container($variables) {
   $element = $variables['element'];
   $element['#children'] = trim($element['#children']);
-  // Remove the autocomplete attributes because the W3C validator complains.
-  // They are only used on forms anyway.
+  // Remove the autocomplete attribute because the W3C validator complains.
+  // It's only used on forms anyway.
   unset($element['#attributes']['autocomplete']);
-  unset($element['#attributes']['x-autocompletetype']);
 
   if (strlen($element['#children']) > 0) {
     $output = '<' . $element['#tag'] . drupal_attributes($element['#attributes']) . '>';

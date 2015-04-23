@@ -31,7 +31,6 @@ function addressfield_format_name_oneline_generate(&$format, $address) {
     '#tag' => 'div',
     '#attributes' => array(
       'class' => array('name-block'),
-      'x-autocompletetype' => 'name',
       'autocomplete' => 'name',
     ),
     '#size' => 30,

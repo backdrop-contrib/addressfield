@@ -37,7 +37,6 @@ function addressfield_format_name_full_generate(&$format, $address) {
     '#required' => TRUE,
     '#attributes' => array(
       'class' => array('first-name'),
-      'x-autocompletetype' => 'given-name',
       'autocomplete' => 'given-name',
     ),
   );
@@ -49,7 +48,6 @@ function addressfield_format_name_full_generate(&$format, $address) {
     '#prefix' => ' ',
     '#attributes' => array(
       'class' => array('last-name'),
-      'x-autocompletetype' => 'family-name',
       'autocomplete' => 'family-name',
     ),
   );
