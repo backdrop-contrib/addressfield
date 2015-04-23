@@ -374,9 +374,11 @@ function addressfield_field_info() {
 function addressfield_default_values($field, $instance, array $address = array()) {
   $available_countries = _addressfield_country_options_list($field, $instance);
   $default_country = $instance['widget']['settings']['default_country'];
-  // If the default country is not in the list of available countries,
-  // fallback to the first country in the list.
-  if ($default_country && !isset($available_countries[$default_country])) {
+  // Fallback to the first country in the list if the default country is not
+  // available, or is empty even though the field is required.
+  $not_available = $default_country && !isset($available_countries[$default_country]);
+  $empty_but_required = empty($default_country) && !empty($instance['required']);
+  if ($not_available || $empty_but_required) {
     $default_country = key($available_countries);
   }
 
