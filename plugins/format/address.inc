@@ -38,7 +38,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#tag' => 'div',
     '#attributes' => array(
       'class' => array('thoroughfare'),
-      'x-autocompletetype' => 'address-line1',
       'autocomplete' => 'address-line1',
     ),
     '#size' => 30,
@@ -50,7 +49,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#tag' => 'div',
     '#attributes' => array(
       'class' => array('premise'),
-      'x-autocompletetype' => 'address-line2',
       'autocomplete' => 'address-line2',
     ),
     '#size' => 30,
@@ -73,7 +71,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#maxlength' => 255,
     '#attributes' => array(
       'class' => array('postal-code'),
-      'x-autocompletetype' => 'postal-code',
       'autocomplete' => 'postal-code',
     ),
   );
@@ -86,6 +83,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#tag' => 'div',
     '#attributes' => array(
       'class' => array('dependent-locality'),
+      'autocomplete' => '"address-level3',
     ),
     // Most formats place this field in its own row.
     '#suffix' => $clearfix,
@@ -99,8 +97,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#prefix' => ' ',
     '#attributes' => array(
       'class' => array('locality'),
-      'x-autocompletetype' => 'locality',
-      'autocomplete' => 'locality',
+      'autocomplete' => '"address-level2',
     ),
   );
   $format['locality_block']['administrative_area'] = array(
@@ -114,8 +111,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#render_option_value' => $address_format['render_administrative_area_value'],
     '#attributes' => array(
       'class' => array('state'),
-      'x-autocompletetype' => 'region',
-      'autocomplete' => 'region',
+      'autocomplete' => 'address-level1',
     ),
   );
   $format['country'] = array(
@@ -125,7 +121,6 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#required' => TRUE,
     '#attributes' => array(
       'class' => array('country'),
-      'x-autocompletetype' => 'country',
       'autocomplete' => 'country',
     ),
     '#weight' => 100,
