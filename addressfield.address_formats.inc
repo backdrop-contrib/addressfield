@@ -235,6 +235,7 @@ function addressfield_get_address_format($country_code) {
     'used_fields' => array('dependent_locality', 'locality', 'administrative_area', 'postal_code'),
     'required_fields' => array('locality', 'administrative_area', 'postal_code'),
     'dependent_locality_label' => t('District'),
+    'render_administrative_area_value' => TRUE,
   );
   $address_formats['KY'] = array(
     'used_fields' => array('administrative_area', 'postal_code'),
