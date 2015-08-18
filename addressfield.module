@@ -730,8 +730,6 @@ function addressfield_field_formatter_settings_summary($field, $instance, $view_
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
-  $summary = '';
-
   if ($settings['use_widget_handlers']) {
     return t('Use widget configuration');
   }

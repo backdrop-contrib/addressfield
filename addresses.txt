@@ -39,7 +39,7 @@ ES		NULL	Bilbao	NULL				NULL
 ET	44	NULL	ADDIS ABABA	NULL	11945	ADDIS ABABA,P.O.BOX 11945		NULL
 FI		NULL	Espoo	NULL	2130	Mahlarinne 3B		NULL
 FI		NULL	Helsinki	NULL	580	Hermannin rantatie 2 A	Hermannin rantatie 2 A	NULL
-FI		NULL	Tampere	NULL	33101	Tampere Univerity of Technology		NULL
+FI		NULL	Tampere	NULL	33101	Tampere University of Technology		NULL
 FI	13	NULL	Espoo	NULL	2150	Aalto Venture Garage	Betonimiehenkuja 3	NULL
 GB		NULL	Exeter	NULL				NULL
 GB		NULL	London	NULL				NULL
