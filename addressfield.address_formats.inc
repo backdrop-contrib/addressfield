@@ -114,7 +114,7 @@ function addressfield_get_address_format($country_code) {
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
   );
   $address_formats['CL'] = array(
-    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'used_fields' => array('dependent_locality', 'locality', 'administrative_area', 'postal_code'),
     'administrative_area_label' => t('State', array(), array('context' => 'Territory of a country')),
     'render_administrative_area_value' => TRUE,
   );
@@ -124,7 +124,7 @@ function addressfield_get_address_format($country_code) {
     'dependent_locality_label' => t('District'),
   );
   $address_formats['CO'] = array(
-    'used_fields' => array('locality', 'administrative_area'),
+    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'administrative_area_label' => t('Department', array(), array('context' => 'Territory of a country')),
   );
   $address_formats['CV'] = array(
