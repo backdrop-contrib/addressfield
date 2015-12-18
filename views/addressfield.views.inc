@@ -26,6 +26,7 @@ function addressfield_field_views_data($field) {
   // Only expose these components as Views field handlers.
   $implemented = array(
     'country' => 'addressfield_views_handler_field_country',
+    'countryname' => 'addressfield_views_handler_argument_countryname',
     'administrative_area' => 'addressfield_views_handler_field_administrative_area',
     'sub_administrative_area' => 'views_handler_field',
     'dependent_locality' => 'views_handler_field',
@@ -62,6 +63,19 @@ function addressfield_field_views_data($field) {
         $valid_columns[$column_name] = $handler;
       }
 
+      // Add a country name handler.
+      if (isset($table[$field['field_name'] . '_country'])) {
+        // Clone the country handler.
+        $table[$field['field_name'] . '_countryname'] = $table[$field['field_name'] . '_country'];
+
+        // Set our own argument handler.
+        $table[$field['field_name'] . '_countryname']['argument']['handler'] = 'addressfield_views_handler_argument_countryname';
+
+        // Remove filter and sort handlers, since these are not needed.
+        unset($table[$field['field_name'] . '_countryname']['filter']);
+        unset($table[$field['field_name'] . '_countryname']['sort']);
+      }
+
       // Iterate over the addressfield components.
       foreach ($table as $column_name => &$column) {
         if (empty($column['field']) && isset($valid_columns[$column_name])) {
@@ -77,6 +91,19 @@ function addressfield_field_views_data($field) {
 
           if (!empty($properties[$property])) {
             $property_label = $properties[$property]['label'];
+
+            $title = t('@field-label - @property-label', array(
+              '@field-label' => $field_label,
+              '@property-label' => $property_label,
+            ));
+
+            $column['title'] = $title;
+            $column['title short'] = $title;
+          }
+          // The country name column is a virtual column - it's not in the
+          // database - so handle it separately.
+          elseif ($property === 'countryname') {
+            $property_label = t('Country name');
 
             $title = t('@field-label - @property-label', array(
               '@field-label' => $field_label,
