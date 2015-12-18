@@ -396,6 +396,20 @@ function addressfield_field_info() {
 }
 
 /**
+ * Implements hook_field_load()
+ */
+function addressfield_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
+  foreach ($entities as $id => $entity) {
+    foreach ($items[$id] as $delta => &$item) {
+      if (!empty($item['data_serialized'])) {
+        $item['data'] = unserialize($item['data_serialized']);
+      }
+      unset($item['data_serialized']);
+    }
+  }
+}
+
+/**
  * Returns an array of default values for the addressfield form elements.
  *
  * @param $field
@@ -437,7 +451,7 @@ function addressfield_default_values($field, $instance, array $address = array()
     'thoroughfare' => '',
     'premise' => '',
     'sub_premise' => '',
-    'data' => '',
+    'data' => array(),
   );
 
   // Allow other modules to alter the default values.
@@ -485,6 +499,13 @@ function addressfield_field_presave($entity_type, $entity, $field, $instance, $l
       if (!in_array($key, array('data')) && is_string($value)) {
         $value = trim(preg_replace('/[[:blank:]]{2,}/u', ' ', $value));
       }
+    }
+
+    if (isset($item['data'])) {
+      $item['data_serialized'] = serialize($item['data']);
+    }
+    else {
+      $item['data_serialized'] = serialize(array());
     }
   }
 }
