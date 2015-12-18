@@ -3,5 +3,3 @@ name = Address Field
 description = Manage a flexible address field, implementing the xNAL standard.
 backdrop = 1.x
 package = Fields
-
-dependencies[] = ctools

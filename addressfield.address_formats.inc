@@ -430,7 +430,7 @@ function addressfield_get_address_format($country_code) {
   );
 
   // Allow other modules to alter the formats.
-  drupal_alter('addressfield_address_formats', $address_formats);
+  backdrop_alter('addressfield_address_formats', $address_formats);
 
   if (isset($address_formats[$country_code])) {
     $format = $address_formats[$country_code] + $default_values;

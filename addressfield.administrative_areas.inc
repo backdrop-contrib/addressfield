@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Returns the predefined administrative areas.
  *
@@ -13,13 +12,13 @@
 function addressfield_get_administrative_areas($country_code) {
   // Maintain a static cache to avoid passing the administrative areas through
   // t() more than once per request.
-  $administrative_areas = &drupal_static(__FUNCTION__, array());
+  $administrative_areas = &backdrop_static(__FUNCTION__, array());
   if (empty($administrative_areas)) {
     // Get the default administrative areas.
     $administrative_areas = _addressfield_get_administrative_areas_defaults();
 
     // Allow other modules to alter the administrative areas.
-    drupal_alter('addressfield_administrative_areas', $administrative_areas);
+    backdrop_alter('addressfield_administrative_areas', $administrative_areas);
   }
 
   return isset($administrative_areas[$country_code]) ? $administrative_areas[$country_code] : NULL;

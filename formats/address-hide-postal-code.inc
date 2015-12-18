@@ -1,16 +1,8 @@
 <?php
-
 /**
  * @file
  * Hide the postal code field.
  */
-
-$plugin = array(
-  'title' => t('Hide the postal code'),
-  'format callback' => 'addressfield_format_address_hide_postal_code',
-  'type' => 'address',
-  'weight' => -85,
-);
 
 /**
  * Format callback.

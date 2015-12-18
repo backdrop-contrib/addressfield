@@ -1,9 +1,23 @@
 <?php
-
 /**
  * @file
  * API documentation for Addressfield.
  */
+
+/**
+ * Info hook defining available address formats.
+ */
+function hook_addressfield_format_info() {
+  return array(
+    'address' => array(
+      'title' => t('Address form (country-specific)'),
+      'format callback' => 'addressfield_format_address_generate',
+      'type' => 'address',
+      'weight' => -100,
+      'file' => 'formats/address.inc',
+    ),
+  );
+}
 
 /**
  * Format generation callback.

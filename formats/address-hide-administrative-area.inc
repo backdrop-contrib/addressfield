@@ -1,16 +1,8 @@
 <?php
-
 /**
  * @file
  * Hide the administrative area field.
  */
-
-$plugin = array(
-  'title' => t('Hide the administrative area'),
-  'format callback' => 'addressfield_format_address_hide_administrative_area',
-  'type' => 'address',
-  'weight' => -84,
-);
 
 /**
  * Format callback.

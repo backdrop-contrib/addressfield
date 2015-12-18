@@ -1,16 +1,8 @@
 <?php
-
 /**
  * @file
  * Generates a first name + last name format.
  */
-
-$plugin = array(
-  'title' => t('Name (First name, Last name)'),
-  'format callback' => 'addressfield_format_name_full_generate',
-  'type' => 'name',
-  'weight' => 0,
-);
 
 /**
  * Format callback.

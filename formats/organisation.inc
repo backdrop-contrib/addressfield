@@ -1,16 +1,8 @@
 <?php
-
 /**
  * @file
  * Generates a first name + last name format.
  */
-
-$plugin = array(
-  'title' => t('Organisation (single line)'),
-  'format callback' => 'addressfield_format_organisation_generate',
-  'type' => 'organisation',
-  'weight' => -10,
-);
 
 /**
  * Format callback.
@@ -27,7 +19,7 @@ function addressfield_format_organisation_generate(&$format, $address) {
     '#access' => !empty($address['country']),
   );
   $format['organisation_block']['organisation_name'] = array(
-    '#title' => t('Company'),
+    '#title' => t('Company / Organization'),
     '#size' => 30,
     '#maxlength' => 255,
     '#attributes' => array(

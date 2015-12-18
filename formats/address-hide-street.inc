@@ -1,16 +1,8 @@
 <?php
-
 /**
  * @file
  * Hide the street address fields.
  */
-
-$plugin = array(
-  'title' => t('Hide the street address'),
-  'format callback' => 'addressfield_format_address_hide_street',
-  'type' => 'address',
-  'weight' => -85,
-);
 
 /**
  * Format callback.

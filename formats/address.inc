@@ -1,16 +1,8 @@
 <?php
-
 /**
  * @file
- * The default format for adresses.
+ * The default format for addresses.
  */
-
-$plugin = array(
-  'title' => t('Address form (country-specific)'),
-  'format callback' => 'addressfield_format_address_generate',
-  'type' => 'address',
-  'weight' => -100,
-);
 
 /**
  * Format callback.
@@ -62,7 +54,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#weight' => 50,
     '#maxlength' => 255,
   );
-  $format['locality_block']['#attached']['css'][] = drupal_get_path('module', 'addressfield') . '/addressfield.css';
+  $format['locality_block']['#attached']['css'][] = backdrop_get_path('module', 'addressfield') . '/addressfield.css';
   $format['locality_block']['postal_code'] = array(
     '#title' => $address_format['postal_code_label'],
     '#required' => in_array('postal_code', $address_format['required_fields']),
@@ -255,7 +247,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   if ($context['mode'] == 'form') {
     // Provide a wrapper ID for AJAX replacement based on country selection.
     if (!isset($format['#wrapper_id'])) {
-      $format['#wrapper_id'] = drupal_html_id('addressfield-wrapper');
+      $format['#wrapper_id'] = backdrop_html_id('addressfield-wrapper');
       $format['#prefix'] = '<div id="' . $format['#wrapper_id'] . '">';
       $format['#suffix'] = '</div>';
     }

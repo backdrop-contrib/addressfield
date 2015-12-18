@@ -1,17 +1,9 @@
 <?php
-
 /**
  * @file
  * Make all fields optional.
  * Allows users to save incomplete addresses, bypassing validation.
  */
-
-$plugin = array(
-  'title' => t('Make all fields optional (No validation - unsuitable for postal purposes)'),
-  'format callback' => 'addressfield_format_address_optional',
-  'type' => 'address',
-  'weight' => 100,
-);
 
 /**
  * Format callback.

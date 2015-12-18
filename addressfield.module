@@ -1,28 +1,8 @@
 <?php
-
 /**
  * @file
  * Defines a field for attaching country-specific addresses to entities.
  */
-
-/**
- * Implements hook_ctools_plugin_directory().
- */
-function addressfield_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'addressfield') {
-    return 'plugins/' . $plugin;
-  }
-}
-
-/**
- * Implements hook_ctools_plugin_type().
- */
-function addressfield_ctools_plugin_type() {
-  $plugins['format'] = array(
-    'load themes' => TRUE,
-  );
-  return $plugins;
-}
 
 /**
  * Implements hook_views_api().
@@ -30,7 +10,7 @@ function addressfield_ctools_plugin_type() {
 function addressfield_views_api() {
   return array(
     'api' => 3,
-    'path' => drupal_get_path('module', 'addressfield') . '/views',
+    'path' => backdrop_get_path('module', 'addressfield') . '/views',
   );
 }
 
@@ -63,7 +43,7 @@ function addressfield_module_implements_alter(&$implementations, $hook) {
  *   An array of addressfield fields.
  */
 function addressfield_get_address_fields($entity_type = '') {
-  $fields = &drupal_static(__FUNCTION__ . '_' . $entity_type);
+  $fields = &backdrop_static(__FUNCTION__ . '_' . $entity_type);
   if (isset($fields)) {
     return $fields;
   }
@@ -92,14 +72,100 @@ function addressfield_field_map_filter($field) {
 }
 
 /**
- * Get the list of format plugins.
+ * Implements hook_addressfield_format_info().
+ */
+function addressfield_addressfield_format_info() {
+  return array(
+    'address' => array(
+      'title' => t('Show the address form (country-specific)'),
+      'format callback' => 'addressfield_format_address_generate',
+      'type' => 'address',
+      'weight' => -100,
+      'file' => 'formats/address.inc',
+    ),
+    'address_hide_country' => array(
+      'title' => t('Hide country field (when only one is available)'),
+      'format callback' => 'addressfield_format_address_hide_country',
+      'type' => 'address',
+      'weight' => -90,
+      'file' => 'formats/address-hide-country.inc',
+    ),
+    'address_hide_postal_code' => array(
+      'title' => t('Hide postal code field (Zip)'),
+      'format callback' => 'addressfield_format_address_hide_postal_code',
+      'type' => 'address',
+      'weight' => -85,
+      'file' => 'formats/address-hide-potal-code.inc',
+    ),
+    'address_hide_administrative_area' => array(
+      'title' => t('Hide administrative area field (State/Province)'),
+      'format callback' => 'addressfield_format_address_hide_administrative_area',
+      'type' => 'address',
+      'weight' => -84,
+      'file' => 'formats/address-hide-administrative-area.inc',
+    ),
+    'address_hide_locality' => array(
+      'title' => t('Hide locality field (City)'),
+      'format callback' => 'addressfield_format_address_hide_locality',
+      'type' => 'address',
+      'weight' => -84,
+      'file' => 'formats/address-hide-locality.inc',
+    ),
+    'address_hide_street' => array(
+      'title' => t('Hide 1st street address field (Address/locality)'),
+      'format callback' => 'addressfield_format_address_hide_street',
+      'type' => 'address',
+      'weight' => -83,
+      'file' => 'formats/address-hide-street.inc',
+    ),
+    'address_hide_street_two' => array(
+      'title' => t('Hide 2nd street address field (Address 2/premise)'),
+      'format callback' => 'addressfield_format_address_hide_premise',
+      'type' => 'address',
+      'weight' => -82,
+      'file' => 'formats/address-hide-premise.inc',
+    ),
+    
+    'name_oneline' => array(
+      'title' => t('Show a Full Name field'),
+      'format callback' => 'addressfield_format_name_oneline_generate',
+      'type' => 'name',
+      'weight' => 0,
+      'file' => 'formats/name-oneline.inc',
+    ),
+    'name_full' => array(
+      'title' => t('Show First & Last name fields)'),
+      'format callback' => 'addressfield_format_name_full_generate',
+      'type' => 'name',
+      'weight' => 0,
+      'file' => 'formats/name-full.inc',
+    ),
+    'organisation' => array(
+      'title' => t('Show Company/Organization field'),
+      'format callback' => 'addressfield_format_organisation_generate',
+      'type' => 'organisation',
+      'weight' => -10,
+      'file' => 'formats/organisation.inc',
+    ),
+    'address_optional' => array(
+      'title' => t('Make all fields optional (No validation - unsuitable for postal purposes)'),
+      'format callback' => 'addressfield_format_address_optional',
+      'type' => 'address',
+      'weight' => 100,
+      'file' => 'formats/address-optional.inc',
+    ),
+  );
+}
+
+/**
+ * Get the sorted list of format plugins.
  */
 function addressfield_format_plugins() {
-  ctools_include('plugins');
-  $plugins = ctools_get_plugins('addressfield', 'format');
-  uasort($plugins, 'ctools_plugin_sort');
+  // @todo statically cachhe these?
+  $all_formats = module_invoke_all('addressfield_format_info');
+  backdrop_sort($all_formats, array('weight' => SORT_NUMERIC, 'title' => SORT_STRING));
 
-  return $plugins;
+  return $all_formats;
 }
 
 /**
@@ -119,18 +185,15 @@ function addressfield_format_plugins_options() {
  * API for generating address forms and display formats.
  *
  * Addresses forms and display formats are collaboratively generated by one or
- * more format handler plugins. An address with a name and a company, for example,
- * will be generated by three handlers:
+ * more addressfield format handler. An address with a name and a company, for
+ * example, will be generated by three handlers:
  *   - 'address' that will generate the country, locality, street blocks
  *   - 'organisation' that will add the organisation block to the address
  *   - 'name-full' that will add a first name and last name block to the address
  *
- * A format handler is a CTools plugin of type 'addressfield' / 'format'. Each
- * handler is passed the format in turn, and can add to or modify the format.
- *
  * The format itself is a renderable array stub. This stub will be transformed
  * into either a Form API array suitable for use as part of a form or into a
- * renderable array suitable for use with drupal_render(). The following
+ * renderable array suitable for use with backdrop_render(). The following
  * modifications are done:
  *   - when rendering as a form, every element which name (its key in the array)
  *     is a valid addressfield column (see addressfield_field_schema()), will
@@ -166,7 +229,7 @@ function addressfield_format_plugins_options() {
  *
  * @return
  *   A renderable array suitable for use as part of a form (if 'mode' is 'form')
- *   or for formatted address output when passed to drupal_render().
+ *   or for formatted address output when passed to backdrop_render().
  */
 function addressfield_generate($address, array $handlers, array $context = array()) {
   // If no mode is given in the context array, default it to 'render'.
@@ -174,14 +237,13 @@ function addressfield_generate($address, array $handlers, array $context = array
     $context['mode'] = 'render';
   }
 
-  ctools_include('plugins');
   $format = array();
   // Add the handlers, ordered by weight.
-  $plugins = addressfield_format_plugins();
-  $format['#handlers'] = array_intersect(array_keys($plugins), $handlers);
+  $all_formats = addressfield_format_plugins();
+  $format['#handlers'] = array_intersect(array_keys($all_formats), $handlers);
 
   foreach ($format['#handlers'] as $handler) {
-    if ($callback = ctools_plugin_load_function('addressfield', 'format', $handler, 'format callback')) {
+    if ($callback = _addressfield_get_format_callback($handler, $all_formats)) {
       $callback($format, $address, $context);
     }
   }
@@ -205,10 +267,10 @@ function addressfield_generate($address, array $handlers, array $context = array
  * Generate a full-fledged form from a format snippet, as returned by addressfield_formats().
  */
 function addressfield_process_format_form($format, &$form_state, $complete_form) {
-  // Make sure to load all the plugins that participated in this format.
-  ctools_include('plugins');
+  $all_formats = addressfield_format_plugins();
+  // Make sure to load all the files necessary to use this format.
   foreach ($format['#handlers'] as $handler) {
-    ctools_plugin_load_function('addressfield', 'format', $handler, 'format callback');
+    _addressfield_get_format_callback($handler, $all_formats);
   }
 
   _addressfield_process_format_form($format, $format['#address']);
@@ -404,7 +466,7 @@ function theme_addressfield_container($variables) {
   unset($element['#attributes']['autocomplete']);
 
   if (strlen($element['#children']) > 0) {
-    $output = '<' . $element['#tag'] . drupal_attributes($element['#attributes']) . '>';
+    $output = '<' . $element['#tag'] . backdrop_attributes($element['#attributes']) . '>';
     $output .= $element['#children'];
     $output .= '</' . $element['#tag'] . '>';
     // Add a linebreak to the HTML after a div. This is invisible on the
@@ -531,7 +593,7 @@ function addressfield_default_values($field, $instance, array $address = array()
     'instance' => $instance,
     'address' => $address,
   );
-  drupal_alter('addressfield_default_values', $default_values, $context);
+  backdrop_alter('addressfield_default_values', $default_values, $context);
 
   return $default_values;
 }
@@ -664,7 +726,7 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
   // $form_state['input'] needs to be used instead.
   $parents = array_merge($element['#field_parents'], array($element['#field_name'], $langcode, $delta));
   if (!empty($form_state['input'])) {
-    $input_address = drupal_array_get_nested_value($form_state['input'], $parents);
+    $input_address = backdrop_array_get_nested_value($form_state['input'], $parents);
   }
   if (!empty($input_address)) {
     $address = $input_address;
@@ -728,7 +790,7 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
     }
 
     // Allow other modules to alter the handlers used.
-    drupal_alter('addressfield_handlers', $settings['format_handlers'], $address, $context);
+    backdrop_alter('addressfield_handlers', $settings['format_handlers'], $address, $context);
     $element += addressfield_generate($address, $settings['format_handlers'], $context);
 
     // Remove any already saved default value.
@@ -748,7 +810,7 @@ function addressfield_standard_country_validate($element, &$form_state) {
   if ($element['#default_value'] != $element['#value']) {
     $parents = $element['#parents'];
     array_pop($parents);
-    $address = drupal_array_get_nested_value($form_state['values'], $parents);
+    $address = backdrop_array_get_nested_value($form_state['values'], $parents);
 
     // Clear the country-specific field values.
     $country_specific_data = array(
@@ -759,8 +821,8 @@ function addressfield_standard_country_validate($element, &$form_state) {
     );
     $address = array_diff_key($address, $country_specific_data);
 
-    drupal_array_set_nested_value($form_state['values'], $parents, $address);
-    drupal_array_set_nested_value($form_state['input'], $parents, $address);
+    backdrop_array_set_nested_value($form_state['values'], $parents, $address);
+    backdrop_array_set_nested_value($form_state['input'], $parents, $address);
 
     $form_state['rebuild'] = TRUE;
   }
@@ -798,7 +860,7 @@ function addressfield_standard_widget_refresh($form, $form_state) {
   $commands[] = ajax_command_prepend(NULL, theme('status_messages'));
 
   // Allow other modules to add arbitrary AJAX commands on the refresh.
-  drupal_alter('addressfield_standard_widget_refresh', $commands, $form, $form_state);
+  backdrop_alter('addressfield_standard_widget_refresh', $commands, $form, $form_state);
 
   return array('#type' => 'ajax', '#commands' => $commands);
 }
@@ -969,7 +1031,7 @@ function addressfield_field_formatter_view($entity_type, $entity, $field, $insta
         );
 
         // Allow other modules to alter the handlers used.
-        drupal_alter('addressfield_handlers', $handlers, $address, $context);
+        backdrop_alter('addressfield_handlers', $handlers, $address, $context);
         $element[$delta] = addressfield_generate($address, $handlers, $context);
       }
       break;
@@ -1080,7 +1142,7 @@ function _addressfield_country_options_list($field = NULL, $instance = NULL) {
     $countries = countries_get_countries('name', array('enabled' => COUNTRIES_ENABLED));
   }
   else {
-    require_once DRUPAL_ROOT . '/includes/locale.inc';
+    require_once BACKDROP_ROOT . '/core/includes/locale.inc';
     $countries = country_get_list();
   }
 
@@ -1107,4 +1169,25 @@ function _addressfield_country_options_list($field = NULL, $instance = NULL) {
   }
 
   return $countries;
+}
+
+/**
+ * Returns the format callback for the specified handler.
+ *
+ * @param $handler
+ *   The format handler of the callback.
+ * @param $formats
+ *   All Format information as returned from hook_addressfield_format_infos().
+ */
+function _addressfield_get_format_callback($handler, $formats) {
+  if (array_key_exists($handler, $formats) && array_key_exists('format callback', $formats[$handler])) {
+    $function = $formats[$handler]['format callback'];
+    if (array_key_exists('file', $formats[$handler])) {
+      $file = str_replace('.inc', '', $formats[$handler]['file']);
+      module_load_include('inc', 'addressfield', $file);
+    }
+    if (function_exists($function)) {
+      return $function;
+    }
+  }
 }
