@@ -319,7 +319,78 @@ function addressfield_theme() {
   $hooks['addressfield_container'] = array(
     'render element' => 'element',
   );
+  $hooks['addressfield_address'] = array(
+    'variables' => array('country' => NULL,
+      'administrative_area' => NULL,
+      'sub_administrative_area' => NULL,
+      'locality' => NULL,
+      'dependent_locality' => NULL,
+      'postal_code' => NULL,
+      'thoroughfare' => NULL,
+      'premise' => NULL,
+      'sub_premise' => NULL,
+      'organisation_name' => NULL,
+      'name_line' => NULL,
+      'first_name' => NULL,
+      'last_name' => NULL,
+      'data' => NULL,
+      'entity_type' => NULL,
+      'entity' => NULL,
+      'field' => NULL,
+      'instance' => NULL,
+      'langcode' => NULL,
+      'display' => NULL,
+    ),
+  );
   return $hooks;
+}
+
+/**
+ * Theme function for rendering an address.
+ *
+ * This is an alternative to Addressfield's plugin system for formatters. To
+ * use this theme function with fields, you must select the "Theme function"
+ * formatter for the field's "Manage Display" settings.
+ *
+ * @param $variables
+ *   An array containing the addressfield sub-fields.
+ */
+function theme_addressfield_address($variables) {
+  // Make each sub-field available as its own variable.
+  extract($variables);
+
+  $output = '';
+  // Render street block
+  if ($thoroughfare || $premise) {
+    $output .= '<div class="street-block">';
+    if ($thoroughfare) {
+      $output .= '<div class="thoroughfare">' . check_plain($thoroughfare) . '</div>';
+    }
+    if ($premise) {
+      $output .= '<div class="premise">' . check_plain($premise) . '</div>';
+    }
+    $output .= '</div>';
+  }
+
+  // Render locality block
+  if ($locality || $administrative_area || $postal_code) {
+    $output .= '<div class="locality-block">';
+    if ($locality) {
+      $output .= '<span class="locality">' . check_plain($locality) . '</span>';
+    }
+    if ($locality && $administrative_area) {
+      $output .= ', ';
+    }
+    if ($administrative_area) {
+      $output .= ' <span class="state">' . check_plain($administrative_area) . '</span>';
+    }
+    if ($postal_code) {
+      $output .= ' <span class="postal-code">' . check_plain($postal_code) . '</span>';
+    }
+    $output .= '</div>';
+  }
+
+  return $output;
 }
 
 /**
@@ -745,6 +816,13 @@ function addressfield_field_formatter_info() {
         'format_handlers' => array('address'),
       ),
     ),
+    'addressfield_themeable' => array(
+      'label' => t('Theme function'),
+      'field types' => array('addressfield'),
+      'settings' => array(
+        'subformatter' => '',
+      ),
+    ),
   );
 }
 
@@ -752,6 +830,32 @@ function addressfield_field_formatter_info() {
  * Implements hook_field_formatter_settings_form().
  */
 function addressfield_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $callback = '_addressfield_field_formatter_settings_form_' . $instance['display'][$view_mode]['type'];
+  if (is_callable($callback)) {
+    return $callback($field, $instance, $view_mode, $form, $form_state);
+  }
+}
+
+/**
+ * Field formatter settings form for addressfield_themeable.
+ */
+function _addressfield_field_formatter_settings_form_addressfield_themeable($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element['subformatter'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Subformatter'),
+    '#default_value' => $settings['subformatter'],
+  );
+
+  return $element;
+}
+
+/**
+ * Field formatter settings form for addressfield_default.
+ */
+function _addressfield_field_formatter_settings_form_addressfield_default($field, $instance, $view_mode, $form, &$form_state) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
@@ -800,6 +904,27 @@ function _addressfield_field_formatter_settings_form_validate($element, &$elemen
  * Implements hook_field_formatter_settings_summary().
  */
 function addressfield_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $callback = '_addressfield_field_formatter_summary_' . $instance['display'][$view_mode]['type'];
+  if (is_callable($callback)) {
+    return $callback($field, $instance, $view_mode);
+  }
+}
+
+/**
+ * Field formatter summary for addressfield_themeable.
+ */
+function _addressfield_field_formatter_summary_addressfield_themeable($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $subformatter = !empty($settings['subformatter']) ? $settings['subformatter'] : '-';
+  return t('Subformatter') . ': ' . $subformatter;
+}
+
+/**
+ * Field formatter summary for addressfield_default.
+ */
+function _addressfield_field_formatter_summary_addressfield_default($field, $instance, $view_mode) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
@@ -846,6 +971,12 @@ function addressfield_field_formatter_view($entity_type, $entity, $field, $insta
         // Allow other modules to alter the handlers used.
         drupal_alter('addressfield_handlers', $handlers, $address, $context);
         $element[$delta] = addressfield_generate($address, $handlers, $context);
+      }
+      break;
+    case 'addressfield_themeable':
+      $entity_info = compact('entity_type', 'entity', 'field', 'instance', 'langcode', 'display');
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array('#markup' => theme('addressfield_address', $item + $entity_info));
       }
       break;
   }
