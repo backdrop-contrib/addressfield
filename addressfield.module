@@ -622,6 +622,21 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
       'langcode' => $langcode,
       'delta' => $delta,
     );
+
+    // Try to get the entity from the form_state
+    if (!empty($form_state['build_info']['args'][0])) {
+      $context['entity'] = $form_state['build_info']['args'][0];
+      // Add what info we know about the entity type
+      if (count($field['entity_types']) == 1) {
+        $context['entity_type'] = $field['entity_types'][0];
+      }
+      else {
+        $context['entity_types'] = $field['entity_types'];
+      }
+    }
+
+    // Allow other modules to alter the handlers used.
+    drupal_alter('addressfield_handlers', $settings['format_handlers'], $address, $context);
     $element += addressfield_generate($address, $settings['format_handlers'], $context);
 
     // Remove any already saved default value.
@@ -803,7 +818,12 @@ function addressfield_field_formatter_view($entity_type, $entity, $field, $insta
           'instance' => $instance,
           'langcode' => $langcode,
           'delta' => $delta,
+          'entity_type' => $entity_type,
+          'entity' => $entity,
         );
+
+        // Allow other modules to alter the handlers used.
+        drupal_alter('addressfield_handlers', $handlers, $address, $context);
         $element[$delta] = addressfield_generate($address, $handlers, $context);
       }
       break;

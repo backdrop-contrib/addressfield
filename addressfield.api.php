@@ -30,6 +30,36 @@ function CALLBACK_addressfield_format_callback(&$format, $address, $context = ar
 }
 
 /**
+ * Allow other modules to alter at run time which handlers to use.
+ * Useful when you want to conditionally add/remove handlers based on data
+ * stored on an entity.
+ *
+ * @param &$handlers
+ *    Array of handlers that can be used. Use a FALSE value to indicate it
+ *    shouldn't be used and the name to indicate it should be used to generate
+ *    the address.
+ * @param $address
+ *    The address data used for the form
+ * @param $context
+ *   An array of context arguments:
+ *     - 'mode': can be either 'form' or 'render'
+ *     - (optional) 'field': when generated for a field, the field
+ *     - (optional) 'instance': when generated for a field, the field instance
+ *     - (optional) 'langcode': when generated for a field, the langcode
+ *       this field is being rendered in.
+ *     - (optional) 'delta': when generated for a field, the delta of the
+ *       currently handled address.
+ *     - (optional) 'entity': The entity that the form/display is created for
+ *     - (optional) 'entity_type': The entity_type of the entity provided
+ *     - (optional) 'entity_types': If an entity_type can't be established,
+ *       an array of types is passed instead.
+ *
+ */
+function hook_addressfield_handlers_alter(&$handlers, $address, $context) {
+  // No example.
+}
+
+/**
  * Allows modules to alter the default values for an address field.
  *
  * @param $default_values
