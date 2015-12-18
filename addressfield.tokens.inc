@@ -89,7 +89,7 @@ function addressfield_token_info() {
  */
 function addressfield_token_info_alter(&$data) {
   // Loop over every address field on the site.
-  foreach (array_filter(field_info_field_map(), 'addressfield_field_map_filter') as $field_name => $field) {
+  foreach (addressfield_get_address_fields() as $field_name => $field) {
     foreach ($data['tokens'] as $group => $token){
       if (isset($data['tokens'][$group][$field_name]) && is_array($data['tokens'][$group][$field_name])) {
         // Set the token type for the field to use the addressfield child tokens.
@@ -212,7 +212,7 @@ function addressfield_tokens($type, $tokens, array $data = array(), array $optio
   // and helps us avoid having to do the entity detection ourselves.
   if ($type == 'entity') {
     // Loop over the address fields defined on the site.
-    foreach (array_filter(field_info_field_map(), 'addressfield_field_map_filter') as $field_name => $field) {
+    foreach (addressfield_get_address_fields($data['entity_type']) as $field_name => $field) {
       // If there are any address field tokens in the token list...
       if ($addressfield_tokens = token_find_with_prefix($tokens, $field_name)) {
         // If the current field is on the matching entity type...

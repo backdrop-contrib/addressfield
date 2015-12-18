@@ -53,6 +53,36 @@ function addressfield_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Return a list of address fields.
+ *
+ * @param string $entity_type
+ *   The entity type to get the addressfields for. If empty, all
+ *   addressfields are returned.
+ *
+ * @return array
+ *   An array of addressfield fields.
+ */
+function addressfield_get_address_fields($entity_type = '') {
+  $fields = &drupal_static(__FUNCTION__ . '_' . $entity_type);
+  if (isset($fields)) {
+    return $fields;
+  }
+
+  // Get all addressfield fields.
+  $fields = array_filter(field_info_field_map(), 'addressfield_field_map_filter');
+  if (!empty($fields)) {
+    // Keep only the fields present on this entity_type to spare some
+    // iterations in the calling function.
+    foreach ($fields as $field_name => $field) {
+      if (!isset($field['bundles'][$entity_type])) {
+        unset($fields[$field_name]);
+      }
+    }
+  }
+  return $fields;
+}
+
+/**
  * Returns TRUE if a field map array value represents an addressfield.
  *
  * Provided for use as a callback by array_filter().
