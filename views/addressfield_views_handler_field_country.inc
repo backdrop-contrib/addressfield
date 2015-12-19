@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Defines a field handler that can display the country name instead of the two
  * character country code for an address field country value.

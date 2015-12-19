@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Defines a field handler that can display the administrative area name
  * instead of the code.

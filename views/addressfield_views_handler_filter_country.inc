@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Defines a field handler for Country.
+ */
 class addressfield_views_handler_filter_country extends views_handler_filter_in_operator {
   function get_value_options() {
     $this->value_title = t('Country');

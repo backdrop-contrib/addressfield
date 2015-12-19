@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Views integration for the addressfield module.
+ */
 
 /**
  * Implements hook_field_views_data().
