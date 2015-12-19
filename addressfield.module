@@ -48,6 +48,16 @@ function addressfield_get_address_fields($entity_type = '') {
     return $fields;
   }
 
+  // Get all field definitions in advance to save individual function calls to field_info_field().
+  $fields = field_info_fields();
+  foreach (field_info_instances($entity_type, $bundle) as $field_name => $instance) {
+    $field = $fields[$field_name];
+    if (!isset($field['bundles'][$entity_type])) {
+      unset($fields[$field_name]);
+    }
+  }
+
+  /* @todo restore after field_info_field_map gets added to Backdrop CMS 
   // Get all addressfield fields.
   $fields = array_filter(field_info_field_map(), 'addressfield_field_map_filter');
   if (!empty($fields)) {
@@ -59,6 +69,7 @@ function addressfield_get_address_fields($entity_type = '') {
       }
     }
   }
+  */
   return $fields;
 }
 
