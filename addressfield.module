@@ -515,7 +515,7 @@ function addressfield_field_info() {
   $fields = array();
 
   $fields['addressfield'] = array(
-    'label' => t('Postal address'),
+    'label' => t('Address'),
     'description' => t('A field type used for storing postal addresses according the xNAL standard.'),
     'settings' => array(),
     'instance_settings' => array(),
