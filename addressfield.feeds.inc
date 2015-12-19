@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Integration with the Feeds module.

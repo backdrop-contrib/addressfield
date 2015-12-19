@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Token module integration.
