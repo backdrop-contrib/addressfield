@@ -1,5 +1,4 @@
 <?php
-
 /*
  * @file
  * Devel Generate for addressfield module
@@ -37,9 +36,9 @@ function _addressfield_devel_generate($object, $field, $instance, $bundle) {
  *   An array of addressfield arrays
  */
 function _addressfield_sample_addresses() {
-  $fields = &drupal_static(__FUNCTION__);
+  $fields = &backdrop_static(__FUNCTION__);
   if (!isset($fields)) {
-    $filepath = DRUPAL_ROOT . '/' . drupal_get_path('module', 'addressfield');
+    $filepath = BACKDROP_ROOT . '/' . backdrop_get_path('module', 'addressfield');
     $fields = array();
     if ($handle = @fopen("$filepath/addresses.txt",'r')) {
       if (is_resource($handle)) {
