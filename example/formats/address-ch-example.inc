@@ -1,17 +1,13 @@
 <?php
-
 /**
  * @file
- * A specific handler for CH.
+ * Example handler specifically for for CH.
  */
 
-$plugin = array(
-  'title' => t('Address form (CH add-on)'),
-  'format callback' => 'addressfield_format_address_ch_generate',
-  'type' => 'address',
-  'weight' => -80,
-);
-
+/**
+ * Example format handler callback: generates the stub render array for both the
+ * edit form and rendering the address when being viewed.
+ */
 function addressfield_format_address_ch_generate(&$format, $address, $context = array()) {
   if ($address['country'] == 'CH' && $context['mode'] == 'form') {
     $format['locality_block']['postal_code']['#wrapper_id'] = $format['#wrapper_id'];
@@ -32,12 +28,18 @@ function addressfield_format_address_ch_generate(&$format, $address, $context = 
   }
 }
 
+/**
+ * Example process callback.
+ */
 function addressfield_format_address_ch_postal_code_process($element) {
   $element['#limit_validation_errors'] = array($element['#parents']);
 
   return $element;
 }
 
+/**
+ * Example validate callback.
+ */
 function addressfield_form_ch_postal_code_validation($element, &$form_state, &$form) {
   $data = array(
     '1000' => array('town' => 'Lausanne', 'canton' => 'VD'),
@@ -3555,11 +3557,11 @@ function addressfield_form_ch_postal_code_validation($element, &$form_state, &$f
     $city = $data[$element['#value']];
 
     // Set the new values in the form.
-    drupal_array_set_nested_value($form_state['values'], array_merge($base_parents, array('locality')), $city['town'], TRUE);
-    drupal_array_set_nested_value($form_state['values'], array_merge($base_parents, array('administrative_area')), $city['canton'], TRUE);
+    backdrop_array_set_nested_value($form_state['values'], array_merge($base_parents, array('locality')), $city['town'], TRUE);
+    backdrop_array_set_nested_value($form_state['values'], array_merge($base_parents, array('administrative_area')), $city['canton'], TRUE);
 
     // Discard value the user has already entered there.
-    drupal_array_set_nested_value($form_state['input'], array_merge($base_parents, array('locality')), NULL, TRUE);
-    drupal_array_set_nested_value($form_state['input'], array_merge($base_parents, array('administrative_area')), NULL, TRUE);
+    backdrop_array_set_nested_value($form_state['input'], array_merge($base_parents, array('locality')), NULL, TRUE);
+    backdrop_array_set_nested_value($form_state['input'], array_merge($base_parents, array('administrative_area')), NULL, TRUE);
   }
 }

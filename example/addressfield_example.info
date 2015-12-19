@@ -1,8 +1,8 @@
-name = Address Field Example
-description = Example module for how to implement an addressfield format handler.
-core = 7.x
+type = module
+name = Address Field Example Format
+description = Example module: How to implement an addressfield format handler.
+backdrop = 1.x
 package = Fields
 hidden = TRUE
 
-dependencies[] = ctools
 dependencies[] = addressfield
