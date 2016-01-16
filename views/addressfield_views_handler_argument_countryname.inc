@@ -61,6 +61,14 @@ class addressfield_views_handler_argument_countryname extends views_handler_argu
   }
 
   /**
+   * Add pre-render function so views doesn't explode.
+   *  @todo find out why this is needed and what it should be doing.
+   */
+  function pre_render() {
+    // Do nothing?
+  }
+
+  /**
    * {@inheritdoc}
    */
   function query($group_by = FALSE) {
@@ -71,10 +79,12 @@ class addressfield_views_handler_argument_countryname extends views_handler_argu
     }
 
     // Look up countries by name.
-    include_once DRUPAL_ROOT . '/includes/locale.inc';
+    include_once BACKDROP_ROOT . '/core/includes/locale.inc';
     $countries = country_get_list();
     $country_by_name = array_flip($countries);
-    $this->argument = $country_by_name[$this->argument];
+    if (isset($country_by_name[$this->argument])) {
+      $this->argument = $country_by_name[$this->argument];
+    }
 
     return parent::query();
   }
