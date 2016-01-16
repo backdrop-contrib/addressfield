@@ -54,7 +54,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#weight' => 50,
     '#maxlength' => 255,
   );
-  $format['locality_block']['#attached']['css'][] = backdrop_get_path('module', 'addressfield') . '/addressfield.css';
+  $format['locality_block']['#attached']['css'][] = backdrop_get_path('module', 'addressfield') . '/css/addressfield.css';
   $format['locality_block']['postal_code'] = array(
     '#title' => $address_format['postal_code_label'],
     '#required' => in_array('postal_code', $address_format['required_fields']),
