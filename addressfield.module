@@ -15,6 +15,21 @@ function addressfield_views_api() {
 }
 
 /**
+ * Implments hook_autoload_info().
+ */
+function addressfield_autoload_info() {
+  return array(
+    // Fields.
+    'addressfield_views_handler_field_country' => 'views/addressfield_views_handler_field_country.inc',
+    'addressfield_views_handler_field_administrative_area' => 'views/addressfield_views_handler_field_administrative_area.inc',
+    // Filters.
+    'addressfield_views_handler_filter_country' => 'views/addressfield_views_handler_filter_country.inc',
+    // Arguments.
+    'addressfield_views_handler_argument_countryname' => 'views/addressfield_views_handler_argument_countryname.inc',
+  );
+}
+
+/**
  * Implements hook_module_implements_alter().
  *
  * Moves the hook_token_info_alter() implementation to the bottom so it is
