@@ -24,6 +24,7 @@ function addressfield_autoload_info() {
     'addressfield_views_handler_field_administrative_area' => 'views/addressfield_views_handler_field_administrative_area.inc',
     // Filters.
     'addressfield_views_handler_filter_country' => 'views/addressfield_views_handler_filter_country.inc',
+    'addressfield_views_handler_filter_country_admin' => 'views/addressfield_views_handler_filter_country_admin.inc',
     // Arguments.
     'addressfield_views_handler_argument_countryname' => 'views/addressfield_views_handler_argument_countryname.inc',
   );

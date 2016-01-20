@@ -56,7 +56,7 @@ class addressfield_views_handler_argument_countryname extends views_handler_argu
       '#type' => 'item',
       '#prefix' => '<p>',
       '#suffix' => '</p>',
-      '#markup' => t('Due to the way that Drupal Core maps country abbreviations to country names, this filter assumes that the value passed in via the URL is written in the same language that the request is being executed with.'),
+      '#markup' => t('Due to the way country abbreviations are mapped to country names, this filter assumes that the value passed in via the URL is written in the same language as the request that is being executed.'),
     );
   }
 
