@@ -587,7 +587,7 @@ function addressfield_default_values($field, $instance, array $address = array()
   $default_country = $instance['widget']['settings']['default_country'];
   // Resolve the special site_default option.
   if ($default_country == 'site_default') {
-    $default_country = variable_get('site_default_country', '');
+    $default_country = config_get('system.date', 'default_country');
   }
   // Fallback to the first country in the list if the default country is not
   // available, or is empty even though the field is required.
