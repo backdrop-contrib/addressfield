@@ -1211,7 +1211,9 @@ function _addressfield_get_format_callback($handler, $formats) {
     $function = $formats[$handler]['format callback'];
     if (array_key_exists('file', $formats[$handler])) {
       $file = str_replace('.inc', '', $formats[$handler]['file']);
-      module_load_include('inc', 'addressfield', $file);
+      foreach (module_implements('addressfield_format_info') as $module) {
+        module_load_include('inc', $module, $file);
+      }
     }
     if (function_exists($function)) {
       return $function;
