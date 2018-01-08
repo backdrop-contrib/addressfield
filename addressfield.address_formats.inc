@@ -71,6 +71,7 @@ function addressfield_get_address_format($country_code) {
   $address_formats['AE'] = array(
     'used_fields' => array('administrative_area'),
     'administrative_area_label' => t('Emirate'),
+    'render_administrative_area_value' => TRUE,
   );
   $address_formats['AM'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
