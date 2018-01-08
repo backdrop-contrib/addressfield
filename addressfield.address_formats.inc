@@ -188,9 +188,10 @@ function addressfield_get_address_format($country_code) {
     'render_administrative_area_value' => TRUE,
   );
   $address_formats['IE'] = array(
-    'used_fields' => array('locality', 'administrative_area'),
+    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'locality_label' => t('Town/City'),
     'administrative_area_label' => t('County'),
+    'postal_code_label' => t('Eircode'),
     'render_administrative_area_value' => TRUE,
   );
   $address_formats['IN'] = array(
