@@ -90,7 +90,7 @@ function addressfield_token_info() {
 function addressfield_token_info_alter(&$data) {
   // Loop over every address field on the site.
   foreach (array_filter(field_info_field_map(), 'addressfield_field_map_filter') as $field_name => $field) {
-    foreach ($data['tokens'] as $group => $token){
+    foreach ($data['tokens'] as $group => $token) {
       if (isset($data['tokens'][$group][$field_name]) && is_array($data['tokens'][$group][$field_name])) {
         // Set the token type for the field to use the addressfield child tokens.
         $data['tokens'][$group][$field_name]['type'] = 'address-field';
