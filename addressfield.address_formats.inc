@@ -145,6 +145,7 @@ function addressfield_get_address_format($country_code) {
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
     'required_fields' => array('locality', 'postal_code'),
     'administrative_area_label' => t('County'),
+    'render_administrative_area_value' => TRUE,
   );
   $address_formats['ES'] = array(
     'used_fields' => array('locality', 'administrative_area', 'postal_code'),
