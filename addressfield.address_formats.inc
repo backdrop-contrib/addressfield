@@ -161,7 +161,7 @@ function addressfield_get_address_format($country_code) {
     'postal_code_label' => t('ZIP code'),
   );
   $address_formats['GB'] = array(
-    'used_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'used_fields' => array('locality', 'postal_code'),
     'required_fields' => array('locality', 'postal_code'),
     'locality_label' => t('Town/City'),
     'administrative_area_label' => t('County'),
