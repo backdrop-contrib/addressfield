@@ -36,8 +36,12 @@ function addressfield_feeds_processor_targets_alter(&$targets, $entity_type, $bu
  *   A string identifying the target on the node.
  * @param $values
  *   The value to populate the target with.
+ * @param array $mapping
+ *  Associative array of the mapping settings from the per mapping
+ *  configuration form.
  */
-function addressfield_set_target($source, $entity, $target, $values) {
+function addressfield_set_target($source, $entity, $target, $values, $mapping) {
+  $language = $mapping['language'];
   list($field_name, $sub_field) = explode(':', $target, 2);
 
   // Convert the values into an array if it isn't one already to correspond to
@@ -52,7 +56,7 @@ function addressfield_set_target($source, $entity, $target, $values) {
 
   // Loop over the field values array...
   foreach ($values as $delta => $value) {
-    $field[LANGUAGE_NONE][$delta][$sub_field] = $value;
+    $field[$language][$delta][$sub_field] = $value;
   }
 
   $entity->{$field_name} = $field;
