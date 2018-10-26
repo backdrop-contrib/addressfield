@@ -939,7 +939,7 @@ function _addressfield_get_administrative_areas_defaults() {
     '21' => t("Zakarpats'ka oblast"),
     '23' => t("Zaporiz'ka oblast"),
     '26' => t("Ivano-Frankivs'ka oblast"),
-    '30' => t('Kiev Oblast'),
+    '30' => t('Kyiv Oblast'),
     '35' => t("Kirovohrads'ka oblast"),
     '09' => t("Luhans'ka oblast"),
     '46' => t('Lviv Oblast'),
