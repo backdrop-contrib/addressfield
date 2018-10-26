@@ -121,7 +121,7 @@ function addressfield_get_address_format($country_code) {
   );
   $address_formats['CN'] = array(
     'used_fields' => array('dependent_locality', 'locality', 'administrative_area', 'postal_code'),
-    'required_fields' => array('locality', 'administrative_area', 'postal_code'),
+    'required_fields' => array('locality', 'administrative_area'),
     'dependent_locality_label' => t('District'),
   );
   $address_formats['CO'] = array(
