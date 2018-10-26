@@ -662,6 +662,7 @@ function _addressfield_get_administrative_areas_defaults() {
     'BCN' => 'Baja California',
     'BCS' => 'Baja California Sur',
     'CAM' => 'Campeche',
+    'CMX' => 'Ciudad de México',
     'COA' => 'Coahuila',
     'COL' => 'Colima',
     'CHP' => 'Chiapas',
