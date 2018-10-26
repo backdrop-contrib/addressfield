@@ -333,6 +333,7 @@ function addressfield_get_address_format($country_code) {
   );
   $address_formats['PH'] = array(
     'used_fields' => array('dependent_locality', 'locality', 'administrative_area', 'postal_code'),
+    'render_administrative_area_value' => TRUE,
   );
   $address_formats['PR'] = array(
     'used_fields' => array('locality', 'postal_code'),
