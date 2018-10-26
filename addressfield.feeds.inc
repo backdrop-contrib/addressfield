@@ -44,6 +44,12 @@ function addressfield_set_target($source, $entity, $target, $values, $mapping) {
   $language = $mapping['language'];
   list($field_name, $sub_field) = explode(':', $target, 2);
 
+  // Field info and instance are required for setting default values.
+  $entity_type = $source->importer->processor->entityType();
+  list(, , $bundle_name) = entity_extract_ids($entity_type, $entity);
+  $info = field_info_field($field_name);
+  $instance = field_info_instance($entity_type, $field_name, $bundle_name);
+
   // Convert the values into an array if it isn't one already to correspond to
   // Drupal's handling of field value arrays.
   if (!is_array($values)) {
@@ -56,6 +62,10 @@ function addressfield_set_target($source, $entity, $target, $values, $mapping) {
 
   // Loop over the field values array...
   foreach ($values as $delta => $value) {
+    // Set defaults for new values.
+    if (!isset($field[$language][$delta])) {
+      $field[$language][$delta] = addressfield_default_values($info, $instance);
+    }
     $field[$language][$delta][$sub_field] = $value;
   }
 
