@@ -73,19 +73,18 @@ function addressfield_get_address_fields($entity_type = '') {
     }
   }
 
-  /* @todo restore after field_info_field_map gets added to Backdrop CMS 
   // Get all addressfield fields.
   $fields = array_filter(field_info_field_map(), 'addressfield_field_map_filter');
   if (!empty($fields)) {
-    // Keep only the fields present on this entity_type to spare some
-    // iterations in the calling function.
+    // Keep only the fields present on this entity_type to spare some iterations
+    // in the calling function.
     foreach ($fields as $field_name => $field) {
       if (!isset($field['bundles'][$entity_type])) {
         unset($fields[$field_name]);
       }
     }
   }
-  */
+
   return $fields;
 }
 
@@ -152,7 +151,7 @@ function addressfield_addressfield_format_info() {
       'weight' => -82,
       'file' => 'formats/address-hide-premise.inc',
     ),
-    
+
     'name_oneline' => array(
       'title' => t('Show a Full Name field'),
       'format callback' => 'addressfield_format_name_oneline_generate',
