@@ -100,8 +100,8 @@ function addressfield_field_schema() {
       'not null' => FALSE,
       'default' => '',
     ),
-    'data_serialized' => array(
-      'description' => 'Additional data for this address (serialized).',
+    'data' => array(
+      'description' => 'Additional data for this address.',
       'type' => 'text',
       'size' => 'big',
       'not null' => FALSE,
@@ -114,3 +114,4 @@ function addressfield_field_schema() {
     // TODO Add indexes.
   );
 }
+
