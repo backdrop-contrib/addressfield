@@ -592,7 +592,7 @@ function addressfield_default_values($field, $instance, array $address = array()
     'thoroughfare' => '',
     'premise' => '',
     'sub_premise' => '',
-    'data' => '',
+    'data' => array(),
   );
 
   // Allow other modules to alter the default values.
@@ -619,11 +619,14 @@ function addressfield_field_is_empty($item, $field) {
  * Implements hook_field_load().
  */
 function addressfield_field_load($entity_type, $entities, $field, $instances, $langcode, &$items) {
-  // 'normalize' addressfield items on load, so items that were saved in an
-  // older format can be compared more easily to newer items. For now, our
-  // field_presave hook does nothing besides 'normalizing', so we can call it.
   foreach ($entities as $id => $entity) {
-    addressfield_field_presave($entity_type, $entity, $field, $instances[$id], $langcode, $items[$id]);
+    foreach($items[$id] as &$item) {
+      _addressfield_normalize_item($item);
+      if (!empty($item['data_serialized'])) {
+        $item['data'] = unserialize($item['data_serialized']);
+      }
+      unset($item['data_serialized']);
+    }
   }
 }
 
@@ -631,29 +634,39 @@ function addressfield_field_load($entity_type, $entities, $field, $instances, $l
  * Implements hook_field_presave().
  */
 function addressfield_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
-  foreach ($items as $delta => &$item) {
-    // If the first name and last name are set but the name line isn't...
-    if (isset($item['first_name']) && isset($item['last_name']) && !isset($item['name_line'])) {
-      // Combine the first and last name to be the name line.
-      $items[$delta]['name_line'] = $items[$delta]['first_name'] . ' ' . $items[$delta]['last_name'];
-    }
-    elseif (isset($item['name_line'])) {
-      // Otherwise if the name line is set, separate it out into a best guess at
-      // the first and last name.
-      $names = explode(' ', $item['name_line']);
+  foreach ($items as &$item) {
+    _addressfield_normalize_item($item);
+    $item['data_serialized'] = serialize(isset($item['data']) ? $item['data'] : array());
+  }
+}
 
-      $item['first_name'] = array_shift($names);
-      $item['last_name'] = implode(' ', $names);
-    }
+/**
+ * Normalizes an addressfield item, so that items that were saved in an
+ * older format can be compared more easily to newer items.
+ */
+function _addressfield_normalize_item(&$item) {
+  // If the first name and last name are set but the name line isn't...
+  if (isset($item['first_name']) && isset($item['last_name']) && !isset($item['name_line'])) {
+    // Combine the first and last name to be the name line.
+    $item['name_line'] = $item['first_name'] . ' ' . $item['last_name'];
+  }
+  elseif (isset($item['name_line'])) {
+    // Otherwise if the name line is set, separate it out into a best guess at
+    // the first and last name.
+    $names = explode(' ', $item['name_line']);
 
-    // Trim whitespace from all of the address components and convert any double
-    // spaces to single spaces.
-    foreach ($item as $key => &$value) {
-      if (!in_array($key, array('data')) && is_string($value)) {
-        $value = trim(preg_replace('/[[:blank:]]{2,}/u', ' ', $value));
-      }
+    $item['first_name'] = array_shift($names);
+    $item['last_name'] = implode(' ', $names);
+  }
+
+  // Trim whitespace from all of the address components and convert any double
+  // spaces to single spaces.
+  foreach ($item as $key => &$value) {
+    if (!in_array($key, array('data')) && is_string($value)) {
+      $value = trim(preg_replace('/[[:blank:]]{2,}/u', ' ', $value));
     }
   }
+
 }
 
 /**
