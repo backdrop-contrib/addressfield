@@ -616,6 +616,18 @@ function addressfield_field_is_empty($item, $field) {
 }
 
 /**
+ * Implements hook_field_load().
+ */
+function addressfield_field_load($entity_type, $entities, $field, $instances, $langcode, &$items) {
+  // 'normalize' addressfield items on load, so items that were saved in an
+  // older format can be compared more easily to newer items. For now, our
+  // field_presave hook does nothing besides 'normalizing', so we can call it.
+  foreach ($entities as $id => $entity) {
+    addressfield_field_presave($entity_type, $entity, $field, $instances[$id], $langcode, $items[$id]);
+  }
+}
+
+/**
  * Implements hook_field_presave().
  */
 function addressfield_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
