@@ -121,7 +121,7 @@ function addressfield_addressfield_format_info() {
       'format callback' => 'addressfield_format_address_hide_postal_code',
       'type' => 'address',
       'weight' => -85,
-      'file' => 'formats/address-hide-potal-code.inc',
+      'file' => 'formats/address-hide-postal-code.inc',
     ),
     'address_hide_administrative_area' => array(
       'title' => t('Hide administrative area field (State/Province)'),
