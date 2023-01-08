@@ -240,9 +240,9 @@ function addressfield_format_plugins_options() {
  *
  * @param $address
  *   The address format being generated.
- * @param $handlers
+ *  @param array $handlers
  *   The format handlers to use to generate the format.
- * @param $context
+ * @param array $context
  *   An associative array of context information pertaining to how the address
  *   format should be generated. If no mode is given, it will initialize to the
  *   default value. The remaining context keys should only be present when the
@@ -252,12 +252,14 @@ function addressfield_format_plugins_options() {
  *   - instance: the field instance array.
  *   - langcode: the langcode of the language the field is being rendered in.
  *   - delta: the delta value of the given address.
+ * @param array $available_countries
+ *   A list of countries to restrict the format to.
  *
- * @return
- *   A renderable array suitable for use as part of a form (if 'mode' is 'form')
- *   or for formatted address output when passed to backdrop_render().
+ * @return array A renderable array suitable for use as part of a form (if 'mode' is 'form')
+ * A renderable array suitable for use as part of a form (if 'mode' is 'form')
+ * or for formatted address output when passed to backdrop_render().
  */
-function addressfield_generate($address, array $handlers, array $context = array()) {
+function addressfield_generate($address, array $handlers, array $context = array(), array $available_countries = array()) {
   // If no mode is given in the context array, default it to 'render'.
   if (empty($context['mode'])) {
     $context['mode'] = 'render';
@@ -267,6 +269,7 @@ function addressfield_generate($address, array $handlers, array $context = array
   // Add the handlers, ordered by weight.
   $all_formats = addressfield_format_plugins();
   $format['#handlers'] = array_intersect(array_keys($all_formats), $handlers);
+  $format['#available_countries'] = $available_countries;
 
   foreach ($format['#handlers'] as $handler) {
     if ($callback = _addressfield_get_format_callback($handler, $all_formats)) {
@@ -280,7 +283,6 @@ function addressfield_generate($address, array $handlers, array $context = array
   // Post-process the format stub, depending on the rendering mode.
   if ($context['mode'] == 'form') {
     $format['#addressfield'] = TRUE;
-    $format['#process'][] = 'addressfield_process_format_form';
   }
   elseif ($context['mode'] == 'render') {
     $format['#pre_render'][] = 'addressfield_render_address';
@@ -519,7 +521,85 @@ function addressfield_element_info() {
     '#attributes' => array(),
     '#tag' => 'div',
   );
+
+  $types['addressfield'] = array(
+    '#process' => array('addressfield_element_process'),
+    '#context' => array('mode' => 'form'),
+    '#handlers' => array('address' => 'address'),
+    '#available_countries' => array_keys(_addressfield_country_options_list()),
+    '#inline' => FALSE,
+    );
+
   return $types;
+}
+
+/**
+* Addressfield process function.
+*/
+function addressfield_element_process($element, &$form_state, $form) {
+  $address = array();
+  // If the form has been rebuilt via AJAX, use the form state values.
+  // $form_state['values'] is empty because of #limit_validation_errors, so
+  // $form_state['input'] needs to be used instead.
+  $parents = $element['#parents'];
+  $input_address = backdrop_array_get_nested_value($form_state['input'], $parents);
+  if (!empty($input_address)) {
+    $address = $input_address;
+  }
+  elseif (!empty($element['#default_value'])) {
+    // Else use the saved value for the field.
+    $address = $element['#default_value'];
+  }
+
+  // Determine the list of available countries, and if the currently selected
+  // country is not in it, unset it so it can be reset to the default country.
+  if (!empty($address['country']) && !in_array($address['country'], $element['#available_countries'])) {
+    unset($address['country']);
+  }
+
+  // Merge in default values. These only take effect if not already present from
+  // the settings in $element['#default_value'].
+  $default_country = isset($address['country']) ? $address['country'] : 'site_default';
+  $element['address'] = array();
+  $address += addressfield_element_default_values($element['#available_countries'], $default_country, $element['#context']);
+
+  // Generate the address form.
+  $element['address'] = addressfield_generate($address, $element['#handlers'], $element['#context'], $element['#available_countries']);
+  $element['address'] = addressfield_process_format_form($element['address'], $form_state, $form);
+
+  $has_parent_widget_container = (isset($element['#context']['has_parent_widget_container']) && $element['#context']['has_parent_widget_container']);
+  $is_inline = (isset($element['#inline']) && $element['#inline'] == TRUE);
+  $element['address']['#type'] = ($has_parent_widget_container || $is_inline ? 'container' : 'fieldset');
+  if (isset($element['#title'])) {
+    $element['address']['#title'] = $element['#title'];
+  }
+
+  // Set the element to required based on the passed in required flag.
+  if (isset($element['#context']['instance']['required'])) {
+    $element['address']['country']['#required'] = (bool) $element['#context']['instance']['required'];
+  }
+  elseif (isset($element['#required'])) {
+    $element['address']['country']['#required'] = isset($element['#required']) ? (bool) $element['#required'] : FALSE;
+  }
+
+ /*
+  * Set the #parents of the children of this element so they appear at the same
+  * level as the parent. This also sets the #required to FALSE if the country
+  * field is not required.
+  */
+ foreach (element_children($element['address']) as $key) {
+   $element['address'][$key]['#parents'] = $element['#parents'];
+   $element['address'][$key]['#parents'][] = $key;
+
+   if ($element['address']['country']['#required'] === FALSE) {
+     $element['address'][$key]['#required'] = FALSE;
+     foreach (element_children($element['address'][$key]) as $inner_key) {
+       $element['address'][$key][$inner_key]['#required'] = FALSE;
+     }
+   }
+ }
+
+ return $element;
 }
 
 /**
@@ -557,25 +637,26 @@ function addressfield_field_info() {
 /**
  * Returns an array of default values for the addressfield form elements.
  *
- * @param $field
- *   The field array.
- * @param $instance
- *   The instance array.
- * @param $address
- *   The current address values, if known. Allows for per-country defaults.
+ * @param $available_countries
+ *   An array of country code-indexed country names.
+ * @param $default_country
+ *   The default country to use.
+ * @param $context
  *
- * @return
- *   An array of default values.
+ * @return array An array of default values.
  */
-function addressfield_default_values($field, $instance, array $address = array()) {
-  $available_countries = _addressfield_country_options_list($field, $instance);
-  $default_country = $instance['widget']['settings']['default_country'];
+function addressfield_element_default_values($available_countries, $default_country, $context) {
+  // Resolve the special site_default option.
+  if ($default_country == 'site_default') {
+    $default_country = config_get('system.date', 'default_country');
+  }
+
   // Fallback to the first country in the list if the default country is not
   // available, or is empty even though the field is required.
-  $not_available = $default_country && !isset($available_countries[$default_country]);
+  $not_available = $default_country && !in_array($default_country, $available_countries);
   $empty_but_required = empty($default_country) && !empty($instance['required']);
   if ($not_available || $empty_but_required) {
-    $default_country = key($available_countries);
+    $default_country = reset($available_countries);
   }
 
   $default_values = array(
@@ -596,6 +677,27 @@ function addressfield_default_values($field, $instance, array $address = array()
   );
 
   // Allow other modules to alter the default values.
+  backdrop_alter('addressfield_default_values', $default_values, $context);
+
+  return $default_values;
+}
+
+/**
+ * Returns an array of default values for the addressfield form elements.
+ *
+ * @param $field
+ *   The field array.
+ * @param $instance
+ *   The instance array.
+ * @param $address
+ *   The current address values, if known. Allows for per-country defaults.
+ *
+ * @return
+ *   An array of default values.
+ */
+function addressfield_default_values($field, $instance, array $address = array()) {
+  $available_countries = _addressfield_field_country_list($field, $instance);
+  $default_country = $instance['widget']['settings']['default_country'];
   $context = array(
     'field' => $field,
     'instance' => $instance,
@@ -603,7 +705,7 @@ function addressfield_default_values($field, $instance, array $address = array()
   );
   backdrop_alter('addressfield_default_values', $default_values, $context);
 
-  return $default_values;
+ return addressfield_element_default_values($available_countries, $default_country, $context);
 }
 
 /**
@@ -761,43 +863,41 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
 
   // Determine the list of available countries, and if the currently selected
   // country is not in it, unset it so it can be reset to the default country.
-  $countries = _addressfield_country_options_list($field, $instance);
+  $countries = _addressfield_country_options_list(
+    !empty($instance['widget']['settings']['available_countries'])
+      ? $instance['widget']['settings']['available_countries']
+      : array()
+      );
   if (!empty($address['country']) && !isset($countries[$address['country']])) {
     unset($address['country']);
   }
-
-  // Merge in default values.
-  $address += addressfield_default_values($field, $instance, $address);
 
   // Add the form elements for the standard widget, which includes a country
   // select list at the top that reloads the available address elements when the
   // country is changed.
   if ($instance['widget']['type'] == 'addressfield_standard') {
     // Wrap everything in a fieldset. This is not the best looking element,
-    // but it's the only wrapper available in Drupal we can properly use
+    // but it's the only wrapper available in Backdrop we can properly use
     // in that context, and it is overridable if necessary.
     $element['#type'] = 'fieldset';
 
-    if (!empty($instance['description'])) {
-      // Checkout panes convert the fieldset into a container, causing
-      // #description to not be rendered. Hence, a real element is added and
-      // the old #description is removed.
-      $element['#description'] = '';
-      $element['element_description'] = array(
-        '#markup' =>  $instance['description'],
-        '#prefix' => '<div class="fieldset-description">',
-        '#suffix' => '</div>',
-        '#weight' => -999,
-      );
-    }
-
-    // Generate the address form.
-    $context = array(
-      'mode' => 'form',
-      'field' => $field,
-      'instance' => $instance,
-      'langcode' => $langcode,
-      'delta' => $delta,
+    $element['address'] = array(
+      '#type' => 'addressfield',
+      '#description' => $element['#description'],
+      '#default_value' => $address,
+      '#handlers' => $settings['format_handlers'],
+      '#available_countries' => _addressfield_field_country_list($field, $instance),
+      '#context' => array(
+        'mode' => 'form',
+        'field' => $field,
+        'instance' => $instance,
+        'address' => $address,
+        'langcode' => $langcode,
+        'delta' => $delta,
+        'has_parent_widget_container' => TRUE,
+      ),
+      // Ensure the submitted value doesn't have the ['address'] index.
+      '#parents' => array_merge($element['#field_parents'], array($element['#field_name'], $langcode, $delta)),
     );
 
     // Try to get the entity from the form_state
@@ -814,7 +914,6 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
 
     // Allow other modules to alter the handlers used.
     backdrop_alter('addressfield_handlers', $settings['format_handlers'], $address, $context);
-    $element += addressfield_generate($address, $settings['format_handlers'], $context);
 
     // Remove any already saved default value.
     // See addressfield_form_field_ui_field_edit_form_alter() for the reasoning.
@@ -1159,8 +1258,11 @@ function addressfield_data_property_info($name = NULL) {
 
 /**
  * Returns the country list in a format suitable for use as an options list.
+ *
+ * @param array $limit_countries
+ * @return array
  */
-function _addressfield_country_options_list($field = NULL, $instance = NULL) {
+function _addressfield_country_options_list(array $limit_countries = array()) {
   if (module_exists('countries')) {
     $countries = countries_get_countries('name', array('enabled' => COUNTRIES_ENABLED));
   }
@@ -1168,6 +1270,15 @@ function _addressfield_country_options_list($field = NULL, $instance = NULL) {
     require_once BACKDROP_ROOT . '/core/includes/locale.inc';
     $countries = country_get_list();
   }
+  if (!empty($limit_countries)) {
+    $countries = array_intersect_key($countries, array_flip($limit_countries));
+  }
+
+ return $countries;
+}
+
+function _addressfield_field_country_list($field = NULL, $instance = NULL) {
+  $countries = array_keys(_addressfield_country_options_list());
 
   if (isset($field)) {
     // If the instance is not specified, loop against all the instances of the field.
@@ -1185,7 +1296,7 @@ function _addressfield_country_options_list($field = NULL, $instance = NULL) {
 
     foreach ($instances as $instance) {
       if (!empty($instance['widget']['settings']['available_countries'])) {
-        $countries = array_intersect_key($countries, $instance['widget']['settings']['available_countries']);
+        $countries = array_intersect($countries, $instance['widget']['settings']['available_countries']);
         break;
       }
     }

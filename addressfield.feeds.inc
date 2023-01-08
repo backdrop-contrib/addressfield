@@ -12,7 +12,7 @@ function addressfield_feeds_processor_targets_alter(&$targets, $entity_type, $bu
     $info = field_info_field($name);
     if ($info['type'] == 'addressfield') {
       foreach ($info['columns'] as $sub_field => $schema_info) {
-        $name_label = $instance['label'] . ': ' . drupal_ucfirst(str_replace('_', ' ', $sub_field));
+        $name_label = $instance['label'] . ': ' . backdrop_ucfirst(str_replace('_', ' ', $sub_field));
         $targets[$name . ':' . $sub_field] = array(
           'name' => $name_label,
           'callback' => 'addressfield_set_target',
@@ -40,7 +40,7 @@ function addressfield_set_target($source, $entity, $target, $values) {
   list($field_name, $sub_field) = explode(':', $target, 2);
 
   // Convert the values into an array if it isn't one already to correspond to
-  // Drupal's handling of field value arrays.
+  // Backdrop's handling of field value arrays.
   if (!is_array($values)) {
     $values = array($values);
   }
