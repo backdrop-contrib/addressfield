@@ -66,7 +66,7 @@ function addressfield_get_address_fields($entity_type = '') {
 
   // Get all addressfield fields.
   $fields = array_filter(field_info_field_map(), 'addressfield_field_map_filter');
-  if (!empty($fields)) {
+  if (!empty($fields) && !empty($entity_type)) {
     // Keep only the fields present on this entity_type to spare some iterations
     // in the calling function.
     foreach ($fields as $field_name => $field) {
