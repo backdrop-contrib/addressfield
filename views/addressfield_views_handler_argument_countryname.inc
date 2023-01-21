@@ -31,7 +31,7 @@
  * However, if a site is available in both English and French, and the site is
  * set up to use cookies to determine the language of the request, then users
  * will experience problems: a request to * "/locations/United States" will show
- * no results if the cookies tell Drupal to perform the request in French.
+ * no results if the cookies tell Backdrop to perform the request in French.
  */
 class addressfield_views_handler_argument_countryname extends views_handler_argument_string {
   /**

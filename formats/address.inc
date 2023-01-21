@@ -263,8 +263,8 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     // Move the country selector to the top of the form.
     $format['country']['#weight'] = -500;
     // Limit it to the countries supported by the widget.
-    if (isset($context['field'])) {
-      $format['country']['#options'] = _addressfield_country_options_list($context['field'], $context['instance']);
+    if (isset($format['#available_countries'])) {
+      $format['country']['#options'] = _addressfield_country_options_list($format['#available_countries']);
     }
 
     // The whole field is considered empty if the country column is empty.

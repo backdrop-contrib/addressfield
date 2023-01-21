@@ -3,6 +3,5 @@ name = Address Field Example Format
 description = Example module: How to implement an addressfield format handler.
 backdrop = 1.x
 package = Fields
-hidden = TRUE
 
 dependencies[] = addressfield
