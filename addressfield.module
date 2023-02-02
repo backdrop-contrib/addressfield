@@ -769,8 +769,8 @@ function addressfield_field_widget_form(&$form, &$form_state, $field, $instance,
   // country is changed.
   if ($instance['widget']['type'] == 'addressfield_standard') {
     // Wrap everything in a fieldset. This is not the best looking element,
-    // but it's the only wrapper available in Drupal we can properly use
-    // in that context, and it is overridable if necessary.
+    // but it's the only wrapper available that we can properly use in this
+    // context, and it is overridable if necessary.
     $element['#type'] = 'fieldset';
 
     if (!empty($instance['description'])) {
