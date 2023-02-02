@@ -561,6 +561,10 @@ function addressfield_field_info() {
 function addressfield_default_values($field, $instance, array $address = array()) {
   $available_countries = _addressfield_country_options_list($field, $instance);
   $default_country = $instance['widget']['settings']['default_country'];
+  // Resolve the special site_default option.
+  if ($default_country == 'site_default') {
+    $default_country = config_get('system.date', 'default_country');
+  }
   // Fallback to the first country in the list if the default country is not
   // available, or is empty even though the field is required.
   $not_available = $default_country && !isset($available_countries[$default_country]);
@@ -700,7 +704,7 @@ function addressfield_field_widget_settings_form($field, $instance) {
     $form['default_country'] = array(
       '#type' => 'select',
       '#title' => t('Default country'),
-      '#options' => array(_addressfield_country_options_list()),
+      '#options' => array('site_default' => t('- Site default -')) + _addressfield_country_options_list(),
       '#default_value' => $settings['default_country'],
       '#empty_value' => '',
     );
