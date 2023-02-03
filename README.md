@@ -16,6 +16,11 @@ The field configuration lets you determine which elements of an address should b
 
 This module does not store or manipulate geographic coordinates or integrate with GIS systems, but it works well in conjunction with modules that do, like Geocoder.
 
+### Webform component
+
+Starting in version 1.x-1.3.2, Addressfield provides a [Webform](https://backdropcms.org/project/webform) form component. This component was ported from the Drupal 7 module [Addressfield Tokens](https://www.drupal.org/project/addressfield_tokens), currently maintained by [amarcus](https://www.drupal.org/u/amarcus), [markie](https://www.drupal.org/u/markie) and [lambic](https://www.drupal.org/u/lambic).
+ 
+
 ### Glossary
 
 As mentioned, this module uses the xNAL (Extensible Name and Address Language) vocabulary for describing address information. The terms used to designate various parts of an address may not be immediately recognizable, so this quick glossary equates the address parts in xNAL to their equivalent U.S. address terms (with some being self-evident):
