@@ -151,7 +151,7 @@ function addressfield_addressfield_format_info() {
       'file' => 'formats/name-oneline.inc',
     ),
     'name_full' => array(
-      'title' => t('Show First & Last name fields)'),
+      'title' => t('Show First & Last name fields'),
       'format callback' => 'addressfield_format_name_full_generate',
       'type' => 'name',
       'weight' => 0,
