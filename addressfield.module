@@ -1343,7 +1343,7 @@ function addressfield_webform_component_info() {
       // attachment. Defaults to FALSE.
       'attachment'    => FALSE,
     ),
-    'file'        => 'addressfield.components.inc',
+    'file'        => 'addressfield.webform.inc',
   );
   return $components;
 }

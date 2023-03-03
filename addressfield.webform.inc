@@ -63,7 +63,6 @@ function _webform_edit_addressfield($component) {
     '#type' => 'select',
     '#multiple' => FALSE,
     '#title' => t('Default country'),
-    '#description' => t('Select which country should be selected as the default.'),
     '#options' => array_merge(array(0 => t('- None -')), _addressfield_country_options_list()),
     '#default_value' => $component['extra']['default_country'],
   );
@@ -76,8 +75,7 @@ function _webform_edit_addressfield($component) {
   );
   $form['extra']['csv_separate'] = array(
     '#type' => 'radios',
-    '#title' => t('CSV download'),
-    '#description' => t('How would you like addresses presented in CSV downloads?'),
+    '#title' => t('How would you like addresses presented in CSV downloads?'),
     '#options' => array(
       0 => t('Display entire address in a single column'),
       1 => t('Display each address component in a separate column'),
