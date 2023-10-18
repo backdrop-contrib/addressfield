@@ -34,7 +34,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     ),
     '#size' => 30,
     '#maxlength' => 255,
-    '#required' => TRUE,
+    '#required' => ($context['instance']['required'] == TRUE) ? TRUE : FALSE,
   );
   $format['street_block']['premise'] = array(
     '#title' => t('Address 2'),
@@ -57,7 +57,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   $format['locality_block']['#attached']['css'][] = backdrop_get_path('module', 'addressfield') . '/css/addressfield.css';
   $format['locality_block']['postal_code'] = array(
     '#title' => $address_format['postal_code_label'],
-    '#required' => in_array('postal_code', $address_format['required_fields']),
+    '#required' => ($context['instance']['required'] == TRUE) ? in_array('postal_code', $address_format['required_fields']) : FALSE,
     '#access' => in_array('postal_code', $address_format['used_fields']),
     '#size' => 10,
     '#maxlength' => 255,
@@ -68,7 +68,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   );
   $format['locality_block']['dependent_locality'] = array(
     '#title' => $address_format['dependent_locality_label'],
-    '#required' => in_array('dependent_locality', $address_format['required_fields']),
+    '#required' => ($context['instance']['required'] == TRUE) ? in_array('dependent_locality', $address_format['required_fields']) : FALSE,
     '#access' => in_array('dependent_locality', $address_format['used_fields']),
     '#size' => 25,
     '#maxlength' => 255,
@@ -82,7 +82,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   );
   $format['locality_block']['locality'] = array(
     '#title' => $address_format['locality_label'],
-    '#required' => in_array('locality', $address_format['required_fields']),
+    '#required' => ($context['instance']['required'] == TRUE) ? in_array('locality', $address_format['required_fields']) : FALSE,
     '#access' => in_array('locality', $address_format['used_fields']),
     '#size' => 30,
     '#maxlength' => 255,
@@ -94,7 +94,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
   );
   $format['locality_block']['administrative_area'] = array(
     '#title' => $address_format['administrative_area_label'],
-    '#required' => in_array('administrative_area', $address_format['required_fields']),
+    '#required' => ($context['instance']['required'] == TRUE) ? in_array('administrative_area', $address_format['required_fields']) : FALSE,
     '#access' => in_array('administrative_area', $address_format['used_fields']),
     '#empty_value' => '',
     '#size' => 10,
@@ -110,7 +110,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     '#title' => t('Country'),
     '#options' => _addressfield_country_options_list(),
     '#render_option_value' => TRUE,
-    '#required' => TRUE,
+    '#required' => ($context['instance']['required'] == TRUE) ? TRUE : FALSE,
     '#attributes' => array(
       'class' => array('country'),
       'autocomplete' => 'country',
@@ -272,7 +272,7 @@ function addressfield_format_address_generate(&$format, $address, $context = arr
     // The same logic applies if the field allows multiple values, in which case
     // only the first delta needs to have a value.
     if (empty($context['instance']['required']) || (isset($context['delta']) && $context['delta'] > 0)) {
-      $format['country']['#required'] = FALSE;
+      $format['country']['#required'] = ($context['instance']['required'] == TRUE) ? TRUE : FALSE;
       $format['country']['#empty_value'] = '';
       // Hide all other fields until the country is selected.
       if (empty($address['country'])) {
