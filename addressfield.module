@@ -421,6 +421,20 @@ function addressfield_theme() {
       'display' => NULL,
     ),
   );
+  // Theme hooks borrowed from addressfield_tokens. Used by webform component.
+  $hooks['addressfield_formatter'] = array(
+    'variables' => array('address' => NULL, 'handlers' => array('address')),
+  );
+
+  $hooks['addressfield_formatter__linear'] = array(
+    'variables' => array(
+      'address' => NULL,
+      'premise' => TRUE,
+      'organisation_name' => TRUE,
+      'name_line' => TRUE,
+    ),
+  );
+
   return $hooks;
 }
 
@@ -498,6 +512,85 @@ function theme_addressfield_container($variables) {
   else {
     return '';
   }
+}
+
+
+/**
+ * Theme function for rendering webform address component.
+ * 
+ * Themes an address according to the default renderer. Borrowed from 
+ * Drupal 7 addressfield_tokens.
+ */
+function theme_addressfield_formatter($vars) {
+  $address = $vars['address'];
+  if (isset($address['addressfield'])) {
+    $address = $address['addressfield'];
+  }
+  $handlers = $vars['handlers'];
+  if (empty($handlers)) {
+    $handlers = array('address');
+  }
+  
+  $out = addressfield_generate($address, $handlers, array('mode' => 'render'));
+  return '<div class="addressfield">' . render($out) . '</div>';
+}
+
+
+/**
+ * Implements theme_field();
+ * 
+ * Themes an address field into "name, street1, street2, city state zip country"
+ * Borrowed from Drupal 7 addressfield_tokens.
+ */
+function theme_addressfield_formatter__linear($vars) {
+  $loc = $vars['address'];
+  
+  // If single line name is empty, construct it from first and last name.
+  if (empty($loc['name_line'])) {
+    $parts = array();
+    if (!empty($loc['first_name'])) {
+      $parts[] = $loc['first_name'];
+    }
+    if (!empty($loc['last_name'])) {
+      $parts[] = $loc['last_name'];
+    }
+    $loc['name_line'] = join(' ', $parts);
+  }
+
+  // Determine which location components to render
+  $out = array();
+  if (!empty($loc['name_line']) && $vars['name_line']) {
+    $out[] = $loc['name_line'];
+  }
+  if (!empty($loc['organisation_name']) && $vars['organisation_name']) {
+    $out[] = $loc['organisation_name'];
+  }
+  if (!empty($loc['thoroughfare'])) {
+    $out[] = $loc['thoroughfare'];
+  }
+  if (!empty($loc['premise']) && $vars['premise']) {
+    $out[] = $loc['premise'];
+  }
+  if (!empty($loc['locality'])) {
+    $out[] = $loc['locality'];
+  }
+  if (!empty($loc['administrative_area'])) {
+    $out[] = $loc['administrative_area'];
+  }
+  if (!empty($loc['postal_code'])) {
+    $out[] = $loc['postal_code'];
+  }
+
+  $available_countries = _addressfield_country_options_list();
+  $default_country = config_get('system.date', 'default_country');
+  if ($loc['country'] != $default_country && $country_name = $available_countries[$loc['country']]) {
+    $out[] = $country_name;
+  }
+  
+  // Render the location components
+  $output = implode(', ', $out);
+  
+  return $output;
 }
 
 /**
@@ -1210,4 +1303,69 @@ function _addressfield_get_format_callback($handler, $formats) {
       return $function;
     }
   }
+}
+
+/**
+ * Implements hook_webform_component_info().
+ */
+function addressfield_webform_component_info() {
+  $components = array();
+  $components['addressfield'] = array(
+    'label'       => t('Address'),
+    'description' => t('Address field.'),
+    'features'    => array(
+      // Add content to CSV downloads. Defaults to TRUE.
+      'csv'           => TRUE,
+      // Show this component in e-mailed submissions. Defaults to TRUE.
+      'email'         => TRUE,
+      // Allow this component to be used as an e-mail FROM or TO address.
+      // Defaults to FALSE.
+      'email_address' => FALSE,
+      // Allow this component to be used as an e-mail SUBJECT or FROM name.
+      // Defaults to FALSE.
+      'email_name'    => FALSE,
+      // This component may be toggled as required or not. Defaults to TRUE.
+      'required'      => TRUE,
+      // This component has a title that can be toggled as displayed or not.
+      'title_display' => TRUE,
+      // This component has a title that can be displayed inline.
+      'title_inline'  => FALSE,
+      // If this component can be used as a conditional SOURCE. All components
+      // may always be displayed conditionally, regardless of this setting.
+      // Defaults to TRUE.
+      'conditional'   => FALSE,
+      // If this component allows other components to be grouped within it
+      // (like a fieldset or tabs). Defaults to FALSE.
+      'group'         => FALSE,
+      // If this component can be used for SPAM analysis, usually with Mollom.
+      'spam_analysis' => FALSE,
+      // If this component saves a file that can be used as an e-mail
+      // attachment. Defaults to FALSE.
+      'attachment'    => FALSE,
+    ),
+    'file'        => 'addressfield.webform.inc',
+  );
+  return $components;
+}
+
+/**
+ * Retrieves node components based on Node ID.
+
+ * @param int $nid
+ *   Node ID.
+ *
+ * @return mixed
+ *   Components.
+ */
+function _addressfield_webform_components($nid) {
+  $components = &backdrop_static(__FUNCTION__, array());
+  if (!isset($components[$nid])) {
+    $components[$nid] = db_select('webform_component')
+      ->fields('webform_component')
+      ->condition('type', 'addressfield')
+      ->condition('nid', $nid)
+      ->execute()
+      ->fetchAllAssoc('cid', PDO::FETCH_ASSOC);
+  }
+  return $components[$nid];
 }
