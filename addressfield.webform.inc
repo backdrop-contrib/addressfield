@@ -160,7 +160,7 @@ function _webform_render_addressfield($component, $value = NULL, $filter = TRUE)
       // Hide the country element only if there is one option and the whole field
       // is required, otherwise there will always be an additional None option.
       // @see addressfield_format_address_hide_country()
-      if (!empty($handlers['address-hide-country']) && count($element['country']['#options']) == 1 && $component['required']) {
+      if (!empty($handlers['address_hide_country']) && count($element['country']['#options']) == 1 && $component['required']) {
         $element['country']['#access'] =  FALSE;
       }
     }
